@@ -1,1 +1,19 @@
 Project for testing things out with HappStack
+
+Libraries used:
+
+HappStack.Server
+-- some database stuff, not yet clear
+Text.XHtml
+
+Current function(s):
+Displays everything behind / (e.g. localhost:8080/foobar displays foobar)
+
+Useful links:
+http://hackage.haskell.org/packages/archive/happstack-server/0.3.3/doc/html/Happstack-Server-SimpleHTTP.html#v%3AmethodOnly
+http://hackage.haskell.org/packages/archive/xhtml/3000.2.0.1/doc/html/Text-XHtml-Transitional.html#v%3AshowHtml
+
+possible application layout:
+* build dispatcher (for easy adding/removing of functionality)
+* get database access (there is currently NO haskell binding for informix)
+* seperate parts into modules (HUIS.xxx)
