@@ -20,7 +20,7 @@ showTestContent:: String-> Html
 showTestContent t = gui "/" << 
   [label << t
   , br
-  , textfield "epicwin" ! [size "50", value $ t]
+  , textfield "epicfail" ! [size "50", value $ t]
   , br
   , submit "update" "gogogo"]
   
