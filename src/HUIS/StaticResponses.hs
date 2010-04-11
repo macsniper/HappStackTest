@@ -8,16 +8,25 @@ every function inside here should be named like "showPageName"
 serves the following static pages:
 
 * start page
-* static files in /ressources
+* static image files in /ressources/img
 -}
+
 
 showStartPage:: ServerPart Response
 showStartPage = 
-  ok $ toResponse $ body << 
-    [ image ! [src "/ressources/img/logo.png"]
-    , br
-    , thediv << "herzlich willkommen!"]
+  ok $ toResponse $ thehtml << 
+    [ header <<
+        [ thetitle << stringToHtml "HUIS"
+        , script ! [thetype "text/javascript", src "/ressources/js/prototype.js"] << noHtml --workaround, as script expects an Html as param
+        , style ! [thetype "text/css", src "/ressources/css/default.css"] << noHtml
+      ]
+    , body << 
+        [ image ! [src "/ressources/img/logo.png"]
+        , thediv << "Herzlich Willkommen!"
+      ] 
+    ]
 
-showImageFile:: String-> ServerPart Response
-showImageFile filedir = 
-  serveFileUsing filePathLazy (guessContentTypeM mimeTypes) ("./ressources/img/" ++ filedir)
+
+showFile:: String-> String-> ServerPart Response
+showFile filedir filename = 
+  serveFileUsing filePathLazy (guessContentTypeM mimeTypes) ("./ressources/" ++ filedir ++ "/" ++ filename)
