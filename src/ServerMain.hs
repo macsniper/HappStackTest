@@ -1,11 +1,14 @@
-module ServerMain where
+module HUIS.ServerMain where
 
+
+import HUIS.Dispatcher
 import Happstack.Server
-import Text.XHtml.Transitional hiding (dir)
-import Control.Monad (msum)
 
-main = simpleHTTP (Conf 8080 Nothing) (testapp)
 
+main = simpleHTTP (Conf 8080 Nothing) (runDispatcher)
+
+-- outdated code
+{-
 testapp:: ServerPart Response
 testapp = msum 
   [ methodOnly GET  >> nullDir >> handleRequest "your Message!"
@@ -30,3 +33,4 @@ showRequest test =
     [ stringToHtml test
     , br
     , anchor ! [href "/" ] << "back"]
+-}
