@@ -8,8 +8,9 @@ main = simpleHTTP (Conf 8080 Nothing) (testapp)
 
 testapp:: ServerPart Response
 testapp = msum 
-  [ methodOnly GET >> path (handleRequest)
-  , methodOnly POST >> withData (showRequest) ]
+  [ methodOnly GET  >> nullDir >> handleRequest "your Message!"
+  , methodOnly POST >> withData (showRequest) 
+  , methodOnly GET  >> path (handleRequest)]
 
 handleRequest:: String-> ServerPart Response
 handleRequest test =
@@ -28,4 +29,4 @@ showRequest test =
   ok $ toResponse $ body << 
     [ stringToHtml test
     , br
-    , anchor ! [href "/epicwin" ] << "back"]
+    , anchor ! [href "/" ] << "back"]
