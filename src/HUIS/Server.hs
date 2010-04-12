@@ -3,9 +3,28 @@ module HUIS.Server where
 
 import HUIS.Dispatcher
 import Happstack.Server
+import Data.ConfigFile
+import Data.Either.Utils
+import Text.Regex
 
 
-main = simpleHTTP (Conf 8080 Nothing) (runDispatcher)
+
+
+main = do
+  port <- parseConfigFile "port"
+  -- todo: put conf into single Map
+  simpleHTTP (Conf (read port::Int) Nothing) (runDispatcher)
+
+
+parseConfigFile:: String-> IO String
+parseConfigFile name = do
+  -- IO stuff :(
+  val <- readfile emptyCP "huis.conf"
+  let confparser = forceEither val
+      initialvalue = show ((forceEither $ get confparser "DEFAULT" name):: String)
+      -- do some regex-replacement-stuff (strip "")
+      actualvalue = subRegex (mkRegex "\"") initialvalue ""
+  return (actualvalue)
 
 -- outdated code
 {-
