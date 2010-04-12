@@ -10,18 +10,27 @@
 
 v0.1: (not yet published)
 
+
 == used Libraries ==
 
-HappStack.Server
--- some database stuff, not yet clear
-Text.XHtml
+happstack-server  >= 0.4
+happstack-util    >= 0.4
+xhtml			  >= 3000.2
+base			  >= 3.0
+-- some database stuff, HDBC <-> Informix
+
+
+
 
 == TODO ==
+
 * plan app layout
 * database access
 * authentication?
 
+
 == Useful links ==
+
 http://gitit.net/paste.lhs
 http://hackage.haskell.org/packages/archive/happstack-server/0.3.3/doc/html/Happstack-Server-SimpleHTTP.html#v%3AmethodOnly
 http://hackage.haskell.org/packages/archive/xhtml/3000.2.0.1/doc/html/Text-XHtml-Transitional.html#v%3AshowHtml
@@ -32,6 +41,7 @@ http://web.archive.org/web/20070406145557/http://www.cse.ogi.edu/~andy/html/intr
 
 
 == (planned) application layout ==
+
 * build dispatcher (for easy adding/removing of functionality)
 * get database access (there is currently NO haskell binding for informix)
 * seperate parts into modules (HUIS.xxx)

@@ -1,3 +1,15 @@
-Name:           HappStackTest
-Version:        0.1 
-Hs-Source-Dirs: src
+Name:           HUIS
+Version:        0.1
+Synopsis:		Haskell University Information System
+Cabal-Version:  >= 1.2
+build-type: 	Simple
+data-dir:       ressources
+
+Executable HUISServer
+  Build-Depends:  happstack-server >= 0.4,
+                  happstack-util >= 0.4,
+                  xhtml >= 3000.2,
+                  base >= 3.0
+  Main-Is:        Main.hs
+  Hs-Source-Dirs: src
+  other-modules:  HUIS.Dispatcher HUIS.StaticResponses HUIS.Server

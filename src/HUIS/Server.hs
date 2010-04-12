@@ -1,4 +1,4 @@
-module HUIS.ServerMain where
+module HUIS.Server where
 
 
 import HUIS.Dispatcher
