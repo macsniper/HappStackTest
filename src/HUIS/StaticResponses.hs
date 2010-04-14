@@ -14,7 +14,8 @@ serves the following static pages:
 
 showStartPage:: ServerPart Response
 showStartPage = 
-  ok $ toResponse $ thehtml << 
+  (fileServe ["login.html"] "./ressources/html/")
+  {-ok $ toResponse $ thehtml << 
     [ header <<
         [ thetitle << stringToHtml "HUIS"
         , script ! [thetype "text/javascript", src "/ressources/js/prototype.js"] << noHtml --workaround, as script expects an Html as param
@@ -25,8 +26,8 @@ showStartPage =
         , thediv << "Herzlich Willkommen!"
       ] 
     ]
-
+-}
 
 showFile:: String-> String-> ServerPart Response
-showFile filedir filename = 
+showFile filedir filename = --TODO: replace static path with one from config-file
   serveFileUsing filePathLazy (guessContentTypeM mimeTypes) ("./ressources/" ++ filedir ++ "/" ++ filename)
