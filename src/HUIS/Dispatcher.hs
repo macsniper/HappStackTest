@@ -19,3 +19,4 @@ runDispatcher = msum
   -- add other requests here
   -- eol
   ]
+--TODO: divide dispatcher in internal and non-internal methods (for login etc).

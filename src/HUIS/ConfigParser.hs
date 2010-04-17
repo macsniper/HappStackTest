@@ -1,5 +1,5 @@
 module HUIS.ConfigParser where
-import Char
+import Data.Char
 import Control.Monad
 import qualified Data.Map as Map
 import Text.ParserCombinators.Parsec
@@ -40,15 +40,19 @@ item = do key <- ident
 
 line :: Parser (Maybe (String, String))
 line = do skipMany space
-          try (comment >> return Nothing) <|> (item >>= return . Just)
+          try (comment >> return Nothing) <|> fmap Just item
 
 
 file :: Parser [(String, String)]
 file = do lines <- many line
           return (catMaybes lines)
+          
+listToMap:: [(String, String)] -> Config
+listToMap = foldr (uncurry Map.insert) Map.empty 
            
-           
-readConfig :: SourceName -> IO (Either ParseError Config)
-readConfig name =
-    parseFromFile file name >>=
-    return . fmap (foldr (uncurry Map.insert) Map.empty . reverse)
+readConfig :: SourceName -> IO Config
+readConfig name = do
+  result <- parseFromFile file name
+  return $ case result of 
+    Left err -> Map.empty
+    Right xs -> listToMap (reverse xs)

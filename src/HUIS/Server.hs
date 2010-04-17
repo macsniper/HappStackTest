@@ -4,14 +4,13 @@ module HUIS.Server where
 import HUIS.Dispatcher
 import HUIS.ConfigParser
 import Happstack.Server
-import Data.ConfigFile
-import Data.Either.Utils
 import Text.Regex
 import Data.Map
-
-
-
+import Data.Maybe
+import Paths_HUIS
 
 main = do
-  conf <- readConfig "huis.conf"
-  simpleHTTP (Conf 8080 Nothing) (runDispatcher)
+  cfile <- getDataFileName "huis.conf"
+  --let cfile = "huis.conf"
+  conf <- readConfig cfile
+  simpleHTTP (Conf (read (conf ! "port")::Int) Nothing) runDispatcher

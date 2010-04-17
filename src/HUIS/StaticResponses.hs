@@ -14,7 +14,7 @@ serves the following static pages:
 
 showStartPage:: ServerPart Response
 showStartPage = 
-  (fileServe ["login.html"] "./ressources/html/")
+  fileServe ["login.html"] "./ressources/html/"
   {-ok $ toResponse $ thehtml << 
     [ header <<
         [ thetitle << stringToHtml "HUIS"
