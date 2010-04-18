@@ -7,7 +7,7 @@ import Happstack.Server
 import Text.Regex
 import Data.Map
 import Data.Maybe
-import Paths_HUIS
+import Paths_HUIS --remove this when local testing
 
 main = do
   cfile <- getDataFileName "huis.conf"
