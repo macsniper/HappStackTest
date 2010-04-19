@@ -13,16 +13,18 @@ import Paths_HUIS
 main = do
   cfile <- getDataFileName "huis.conf"
   conf <- readConfig cfile
+  let rdir = conf ! "ressourcedir"
   -- initialisation for gitit-wiki
-  wikiconf <- getWikiConfiguration
+  wikiconf <- getWikiConfiguration rdir
   simpleHTTP (Conf (read (conf ! "port")::Int) Nothing) (runDispatcher conf wikiconf)
 
 -- initialises the gitit-wiki and returns the configuration-file
-getWikiConfiguration:: IO Network.Gitit.Config
-getWikiConfiguration = do
+getWikiConfiguration::String-> IO Network.Gitit.Config
+getWikiConfiguration resdir = do
   conf <- Network.Gitit.getDefaultConfig
-  tpldir <- getDataDir ++ "ressources"
-  let conf' = conf{ --authHandler     = myAuthHandler
+  tpldir' <- getDataDir
+  let tpldir = (tpldir' ++ resdir)
+      conf' = conf{ --authHandler     = myAuthHandler
                   --, withUser        = myWithUser,
                     repositoryPath  = (tpldir ++ "/wiki/repo")
                   , repositoryType  = Network.Gitit.Git
