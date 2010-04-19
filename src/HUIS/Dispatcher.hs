@@ -4,9 +4,11 @@ import Happstack.Server
 import Control.Monad (msum)
 import qualified Data.Map
 import HUIS.StaticResponses
+import qualified Network.Gitit
+import HUIS.ConfigParser
 
-runDispatcher:: ServerPart Response
-runDispatcher = msum 
+runDispatcher:: Config-> Network.Gitit.Config-> ServerPart Response
+runDispatcher conf wikiconf = msum 
   -- GET '/' => show start page | simple authentification
   [ basicAuth "HUIS" (Data.Map.fromList [("admin", "password")]) (methodOnly GET  >> nullDir >> showStartPage)
   -- GET '/ressources/img/*' => serve image-file
@@ -15,6 +17,8 @@ runDispatcher = msum
   , methodOnly GET >> dir "ressources" ( dir "css" ( path (showFile "css")))
   -- GET '/ressources/js/*' => serve javascript-file
   , methodOnly GET >> dir "ressources" ( dir "js" ( path (showFile "js")))
+  -- GET '/wiki/' => serve wiki
+  , dir "wiki" $ Network.Gitit.wiki wikiconf
   
   -- add other requests here
   -- eol

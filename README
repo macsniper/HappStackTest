@@ -13,14 +13,7 @@ v0.1: (not yet published)
 
 == used Libraries ==
 
-happstack-server  >= 0.4
-happstack-util    >= 0.4
-xhtml			  >= 3000.2
-base			  >= 3.0
--- some database stuff, HDBC <-> Informix
-
-
-
+see .cabal-file
 
 == TODO ==
 

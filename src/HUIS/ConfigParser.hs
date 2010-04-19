@@ -1,4 +1,4 @@
-module HUIS.ConfigParser(readConfig) where
+module HUIS.ConfigParser(readConfig,Config) where
 import Data.Char
 import Control.Monad
 import qualified Data.Map as Map
