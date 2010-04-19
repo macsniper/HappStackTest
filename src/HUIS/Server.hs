@@ -21,7 +21,7 @@ main = do
 getWikiConfiguration:: IO Network.Gitit.Config
 getWikiConfiguration = do
   conf <- Network.Gitit.getDefaultConfig
-  tpldir <- getDataDir "ressources"
+  tpldir <- getDataDir ++ "ressources"
   let conf' = conf{ --authHandler     = myAuthHandler
                   --, withUser        = myWithUser,
                     repositoryPath  = (tpldir ++ "/wiki/repo")
