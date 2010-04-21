@@ -14,24 +14,25 @@ main = do
   cfile <- getDataFileName "huis.conf"
   conf <- readConfig cfile
   let rdir = conf ! "ressourcedir"
+      wikidir = conf ! "wikidir"
   -- initialisation for gitit-wiki
-  wikiconf <- getWikiConfiguration rdir
+  wikiconf <- getWikiConfiguration rdir wikidir
   simpleHTTP (Conf (read (conf ! "port")::Int) Nothing) (runDispatcher conf wikiconf)
 
 -- initialises the gitit-wiki and returns the configuration-file
-getWikiConfiguration::String-> IO Network.Gitit.Config
-getWikiConfiguration resdir = do
+getWikiConfiguration::String-> String-> IO Network.Gitit.Config
+getWikiConfiguration resdir wikidir = do
   conf <- getDefaultConfig
   tpldir' <- getDataDir
-  let tpldir = tpldir' ++ resdir
-      conf' = conf{ --authHandler     = myAuthHandler
+  let tpldir = tpldir' ++ resdir ++ wikidir
+      conf' = conf{ authHandler     = wikiAuthDispatcher wikidir
                   --, withUser        = myWithUser,
-                    repositoryPath  = tpldir ++ "/wiki/repo"
+                  , repositoryPath  = tpldir ++ "/repo"
                   , repositoryType  = Git
                   , defaultPageType = Markdown
-                  , templatesDir    = tpldir ++ "/wiki/tpl" 
-                  , cacheDir        = tpldir ++ "/wiki/cache"
-                  , staticDir       = tpldir ++ "/wiki/static"}
+                  , templatesDir    = tpldir ++ "/tpl" 
+                  , cacheDir        = tpldir ++ "/cache"
+                  , staticDir       = tpldir ++ "/static"}
   createStaticIfMissing conf'
   createRepoIfMissing conf'
   createTemplateIfMissing conf'

@@ -1,4 +1,4 @@
-module HUIS.Dispatcher where
+module HUIS.Dispatcher(runDispatcher, wikiAuthDispatcher) where
 
 import Happstack.Server
 import Control.Monad (msum)
@@ -24,3 +24,8 @@ runDispatcher conf wikiconf = msum
   -- eol
   ]
 --TODO: divide dispatcher in internal and non-internal methods (for login etc).
+
+-- needed for gitit-wiki to redirect logins
+wikiAuthDispatcher wikidir = msum
+   [ dir "_login"  $ seeOther (wikidir ++ "/_login")  $ toResponse ()
+   , dir "_logout" $ seeOther (wikidir ++ "/_logout") $ toResponse () ]
