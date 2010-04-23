@@ -25,9 +25,8 @@ getWikiConfiguration resdir wikidir = do
   conf <- getDefaultConfig
   tpldir' <- getDataDir
   let tpldir = tpldir' ++ resdir ++ wikidir
-      conf' = conf{ authHandler     = wikiAuthDispatcher wikidir
-                  --, withUser        = myWithUser,
-                  , repositoryPath  = tpldir ++ "/repo"
+      conf' = conf{ --, withUser        = myWithUser,
+                   repositoryPath  = tpldir ++ "/repo"
                   , repositoryType  = Git
                   , defaultPageType = Markdown
                   , templatesDir    = tpldir ++ "/tpl" 

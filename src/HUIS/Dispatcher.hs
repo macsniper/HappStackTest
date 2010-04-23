@@ -6,6 +6,7 @@ import qualified Data.Map
 import HUIS.StaticResponses
 import qualified Network.Gitit
 import HUIS.ConfigParser
+import Data.Map
 
 runDispatcher:: Config-> Network.Gitit.Config-> ServerPart Response
 runDispatcher conf wikiconf = msum 
@@ -19,6 +20,7 @@ runDispatcher conf wikiconf = msum
   , methodOnly GET >> dir "ressources" ( dir "js" ( path (showFile "js")))
   -- GET '/wiki/' => serve wiki
   , dir "wiki" $ Network.Gitit.wiki wikiconf
+  , dir "_login" $ seeOther (conf ! "wikidir" ++ "_login") $ toResponse()
   
   -- add other requests here
   -- eol
