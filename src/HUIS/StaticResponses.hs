@@ -12,9 +12,9 @@ serves the following static pages:
 -}
 
 
-showStartPage:: ServerPart Response
-showStartPage = 
-  fileServe ["login.html"] "./ressources/html/"
+showStartPage:: String-> ServerPart Response
+showStartPage filedir = 
+  fileServe ["login.html"] (filedir ++ "html/")
   {-ok $ toResponse $ thehtml << 
     [ header <<
         [ thetitle << stringToHtml "HUIS"
@@ -30,4 +30,4 @@ showStartPage =
 
 showFile:: String-> String-> ServerPart Response
 showFile filedir filename = --TODO: replace static path with one from config-file
-  serveFileUsing filePathLazy (guessContentTypeM mimeTypes) ("./ressources/" ++ filedir ++ "/" ++ filename)
+  serveFileUsing filePathLazy (guessContentTypeM mimeTypes) (filedir ++ "/" ++ filename)

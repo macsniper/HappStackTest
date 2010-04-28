@@ -1,25 +1,24 @@
-module HUIS.Dispatcher(runDispatcher, wikiAuthDispatcher) where
+module HUIS.Dispatcher(runDispatcher) where
 
 import Happstack.Server
 import Control.Monad (msum)
-import qualified Data.Map
 import HUIS.StaticResponses
 import qualified Network.Gitit
 import HUIS.ConfigParser
-import Data.Map
+import Data.Map hiding(map)
+
+staticdirs:: [String]
+staticdirs = ["js", "css", "img"]
 
 runDispatcher:: Config-> Network.Gitit.Config-> ServerPart Response
 runDispatcher conf wikiconf = msum 
   -- GET '/' => show start page | simple authentification
-  [ basicAuth "HUIS" (Data.Map.fromList [("admin", "password")]) (methodOnly GET  >> nullDir >> showStartPage)
-  -- GET '/ressources/img/*' => serve image-file
-  , methodOnly GET >> dir "ressources" ( dir "img" ( path (showFile "img")))
-  -- GET '/ressources/css/*' => serve css-file
-  , methodOnly GET >> dir "ressources" ( dir "css" ( path (showFile "css")))
-  -- GET '/ressources/js/*' => serve javascript-file
-  , methodOnly GET >> dir "ressources" ( dir "js" ( path (showFile "js")))
-  -- GET '/wiki/' => serve wiki
+  [ basicAuth "HUIS" (fromList [("admin", "password")]) (methodOnly GET  >> nullDir >> showStartPage (conf ! "ressourcedir"))
+  -- GET '/ressources/css|js|img)/*'
+  , msum $ map (serveStaticFile (conf ! "ressourcedir")) staticdirs
+  -- GET '/wiki' 
   , dir "wiki" $ Network.Gitit.wiki wikiconf
+  -- buggy Wiki-login redirect - fix for
   , dir "_login" $ seeOther (conf ! "wikidir" ++ "_login") $ toResponse()
   
   -- add other requests here
@@ -27,7 +26,5 @@ runDispatcher conf wikiconf = msum
   ]
 --TODO: divide dispatcher in internal and non-internal methods (for login etc).
 
--- needed for gitit-wiki to redirect logins
-wikiAuthDispatcher wikidir = msum
-   [ dir "_login"  $ seeOther (wikidir ++ "/_login")  $ toResponse ()
-   , dir "_logout" $ seeOther (wikidir ++ "/_logout") $ toResponse () ]
+serveStaticFile:: String-> String-> ServerPart Response
+serveStaticFile rdir sdir = methodOnly GET >> dir "ressources" ( dir sdir ( path $ showFile (rdir ++ sdir)))
