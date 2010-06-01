@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+# Init file for HUIS server daemon
+# Place in /etc/init.d/ and chmod a+x
+# 
+# description: OpenSSH server daemon
+#
+# processname: sshd
+# pidfile: /var/run/huis.pid
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+RETVAL=0
+prog="HUISServer"
+
+# Some functions to make the below more readable
+SSHD="nohup /usr/local/bin/HUISServer"
+PID_FILE=/var/run/huis.pid
+
+
+start()
+{
+        echo -n $"Starting $prog: "
+        daemon $SSHD $OPTIONS &
+        echo
+}
+
+stop()
+{
+        echo -n $"Stopping $prog: "
+        killall $prog
+        echo
+}
+
+
+case "$1" in
+        start)
+                start
+                ;;
+        stop)
+                stop
+                ;;
+        restart)
+                stop
+                start
+                ;;
+        *)
+                echo $"Usage: $0 {start|stop|restart}"
+                RETVAL=1
+esac
+exit $RETVAL
+
