@@ -9,7 +9,7 @@ import Data.Map
 
 
 connectDatabase:: Config -> IO Connection
-connectDatabase config = connect (config ! "dbsource") (config ! "user") (config ! "dbpass")
+connectDatabase config = connect (config ! "dbsource") (config ! "dbuser") (config ! "dbpass")
 
 selectQuery:: String -> Connection -> IO Statement
 selectQuery querystring conn = do
