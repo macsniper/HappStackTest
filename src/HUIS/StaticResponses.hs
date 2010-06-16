@@ -12,10 +12,10 @@ serves the following static pages:
 * static image files in /ressources/img
 -}
 
-
+-- | Shows the start (index) page.
 showStartPage:: String-> ServerPart Response
 showStartPage filedir =
-  fileServe ["login.html"] (filedir ++ "html/")
+  fileServe ["index.html"] (filedir ++ "html/")
   {-ok $ toResponse $ thehtml <<
     [ header <<
         [ thetitle << stringToHtml "HUIS"
@@ -29,6 +29,7 @@ showStartPage filedir =
     ]
 -}
 
+-- | Serves a file, identified by 'filedir' (without trailing \/) and 'filename'. 
 showFile:: String-> String-> ServerPart Response
-showFile filedir filename = --TODO: replace static path with one from config-file
+showFile filedir filename = 
   serveFileUsing filePathLazy (guessContentTypeM mimeTypes) (filedir ++ "/" ++ filename)

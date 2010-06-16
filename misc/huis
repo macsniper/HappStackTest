@@ -3,10 +3,9 @@
 # Init file for HUIS server daemon
 # Place in /etc/init.d/ and chmod a+x
 # 
-# description: OpenSSH server daemon
+# description: HUIS Server daemon
 #
-# processname: sshd
-# pidfile: /var/run/huis.pid
+# processname: HUISServer
 
 # source function library
 . /etc/rc.d/init.d/functions
@@ -15,8 +14,7 @@ RETVAL=0
 prog="HUISServer"
 
 # Some functions to make the below more readable
-SSHD="nohup /usr/local/bin/HUISServer"
-PID_FILE=/var/run/huis.pid
+SSHD="/usr/local/bin/HUISServer"
 
 
 start()
