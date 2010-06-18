@@ -3,7 +3,7 @@ Version:        0.1
 Synopsis:		Haskell University Information System
 Cabal-Version:  >= 1.2
 build-type: 	Simple
-data-files:     huis.conf, ressources/img/*.png, ressources/css/*.css, ressources/js/*.js, ressources/html/*.html
+data-files:     huis.conf, ressources/img/*.png, ressources/css/*.css, ressources/js/*.js
 
 Executable HUISServer
   Build-Depends:  happstack-server >= 0.4,
@@ -21,4 +21,4 @@ Executable HUISServer
                   unix >= 2.4.0
   Main-Is:        Main.hs
   Hs-Source-Dirs: src
-  other-modules:  HUIS.Dispatcher HUIS.StaticResponses HUIS.Server, HUIS.ConfigParser, Paths_HUIS
+  other-modules:  HUIS.Dispatcher HUIS.StaticResponses HUIS.Server, HUIS.ConfigParser, HUIS.SimpleQuery, Paths_HUIS

@@ -26,10 +26,10 @@ main = do
   -- initialisation for gitit-wiki
   wikiconf <- getWikiConfiguration rdir wikidir
   -- drop user rights
-  getUserEntryForName (conf ! "user") >>= setUserID . userID
+  --getUserEntryForName (conf ! "user") >>= setUserID . userID
   -- initialise database
   connection <- connectDatabase conf'
-  simpleHTTPWithSocket socket httpconf (runDispatcher conf' wikiconf)
+  simpleHTTPWithSocket socket httpconf (runDispatcher conf' wikiconf connection)
   
 
 -- |Initialises the gitit-wiki and returns the configuration-file.
