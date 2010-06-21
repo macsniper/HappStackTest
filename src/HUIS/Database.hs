@@ -15,3 +15,5 @@ selectQuery:: String -> Connection -> IO Statement
 selectQuery querystring conn = do
   rows <- query conn querystring
   return rows
+  
+
