@@ -1,4 +1,4 @@
-module HUIS.StaticResponses(showStartPage, showPage, showFile, showPageWithData) where
+module HUIS.StaticResponses where
 
 import Text.XHtml.Transitional hiding (dir)
 import Happstack.Server

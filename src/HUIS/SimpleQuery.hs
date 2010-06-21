@@ -5,6 +5,8 @@ import HUIS.Database
 import Database.HDBC
 import Database.HDBC.ODBC
 import Happstack.Server
+import Control.Monad.Trans (MonadIO, liftIO)
+import HUIS.StaticResponses
 
 data SimpleQuery = SimpleQuery{content :: String}
 
@@ -21,16 +23,29 @@ simpleQueryForm =
   , thediv << "Einfaches Query-Interface, nur SELECT-Abfragen moeglich."
   ]
 
+simpleQueryResult:: Connection-> SimpleQuery-> ServerPart Response
+simpleQueryResult conn req = do
+  result <- liftIO $ handleSqlError $ quickQuery conn (content req) []
+  ok $ toResponse $ queryToHtml result
+  
+queryToHtml:: [[SqlValue]]-> Html
+queryToHtml stmt = thehtml <<
+    [ header << headerContent "Einfaches Query-Interface"
+    , body << concat [upperBody, simpleQueryForm, (resultTable stmt), lowerBody]]  
 
 
+resultTable:: [[SqlValue]]-> [Html]
+resultTable res = 
+  [table << map resultLine res]
   
-simpleQueryResult:: Connection-> SimpleQuery-> [Html]
-simpleQueryResult conn req =
-  [thediv << ("Query-String war " ++ content req)]
+resultLine:: [SqlValue]-> Html
+resultLine resline =
+  tr << map resultEntry resline
+  
+resultEntry:: SqlValue-> Html
+resultEntry val = td << (stringToHtml $ fromSql val)
   
 
-  
-  
 instance FromData SimpleQuery where
   fromData = do
     queryS <- look "queryselect"

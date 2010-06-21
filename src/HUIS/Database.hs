@@ -14,4 +14,3 @@ selectQuery querystring conn = do
   rows <- quickQuery' conn querystring []
   return rows
   
-
