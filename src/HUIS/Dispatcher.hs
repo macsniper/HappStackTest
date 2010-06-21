@@ -8,7 +8,7 @@ import HUIS.SimpleQuery
 import qualified Network.Gitit
 import HUIS.ConfigParser
 import Data.Map hiding(map)
-import Database.HSQL
+import Database.HDBC.ODBC
 
 
 staticdirs:: [String]

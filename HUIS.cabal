@@ -16,8 +16,8 @@ Executable HUISServer
                   parsec >= 2.1,
                   haskell98,
                   gitit >= 0.7,
-                  hsql-odbc >= 1.8,
-                  hsql >= 1.8,
+                  HDBC-odbc >= 2.2.3.0,
+                  HDBC >= 2.2.6,
                   unix >= 2.4.0
   Main-Is:        Main.hs
   Hs-Source-Dirs: src

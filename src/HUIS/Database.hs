@@ -1,19 +1,17 @@
 module HUIS.Database (connectDatabase, selectQuery) where
 
-
-import Database.HSQL
-import Database.HSQL.ODBC
-import Database.HSQL.Types
+import Database.HDBC
+import Database.HDBC.ODBC
 import HUIS.ConfigParser(Config)
 import Data.Map
 
 
 connectDatabase:: Config -> IO Connection
-connectDatabase config = connect (config ! "dbsource") (config ! "dbuser") (config ! "dbpass")
+connectDatabase config = connectODBC $ "DSN=" ++  (config ! "dbsource") ++ ";UID" ++  (config ! "dbuser") ++ ";PWDDBMS" ++ (config ! "dbpass") ++ ";"
 
-selectQuery:: String -> Connection -> IO Statement
+selectQuery:: String -> Connection -> IO [[SqlValue]]
 selectQuery querystring conn = do
-  rows <- query conn querystring
+  rows <- quickQuery' conn querystring []
   return rows
   
 

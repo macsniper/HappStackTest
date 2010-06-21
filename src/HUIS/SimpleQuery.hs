@@ -1,7 +1,9 @@
 module HUIS.SimpleQuery where
 
 import Text.XHtml.Transitional hiding (dir,content)
-import Database.HSQL
+import HUIS.Database
+import Database.HDBC
+import Database.HDBC.ODBC
 import Happstack.Server
 
 data SimpleQuery = SimpleQuery{content :: String}
@@ -25,6 +27,9 @@ simpleQueryForm =
 simpleQueryResult:: Connection-> SimpleQuery-> [Html]
 simpleQueryResult conn req =
   [thediv << ("Query-String war " ++ content req)]
+  
+
+  
   
 instance FromData SimpleQuery where
   fromData = do
