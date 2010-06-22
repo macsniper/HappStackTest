@@ -7,7 +7,7 @@ import Data.Map
 
 
 connectDatabase:: Config -> IO Connection
-connectDatabase config = connectODBC $ "DSN=" ++  (config ! "dbsource") ++ ";UID" ++  (config ! "dbuser") ++ ";PWDDBMS" ++ (config ! "dbpass") ++ ";"
+connectDatabase config = connectODBC $ "DSN=" ++  (config ! "dbsource") ++ ";UID=" ++  (config ! "dbuser") ++ "PWD=" ++ (config ! "dbpass") ++";"
 
 selectQuery:: String -> Connection -> IO [[SqlValue]]
 selectQuery querystring conn = do
