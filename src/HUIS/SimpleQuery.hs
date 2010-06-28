@@ -7,6 +7,8 @@ import Database.HDBC.ODBC
 import Happstack.Server
 import Control.Monad.Trans (MonadIO, liftIO)
 import HUIS.StaticResponses
+import Data.List
+import Data.Char
 
 data SimpleQuery = SimpleQuery{content :: String}
 
@@ -51,5 +53,14 @@ instance FromData SimpleQuery where
     queryS <- look "queryselect"
     queryF <- look "queryfrom"
     queryW <- look "querywhere"
-    let query = "SELECT " ++ queryS ++ " FROM " ++ queryF ++ " WHERE " ++ queryW
+    let query = queryOnly $ "SELECT " ++ queryS ++ " FROM " ++ queryF ++ " WHERE " ++ queryW
     return SimpleQuery{content = query}
+
+-- | Checks for bad keywords ("DROP", "DELETE", "INSERT", "UPDATE" etc)
+queryOnly:: String-> String
+queryOnly [] = []
+queryOnly s =
+  if [True] `isInfixOf` ( map (\st -> st `isInfixOf` (map toUpper s)) disallowed)
+  then ""
+  else s
+  where disallowed = ["DROP", "DELETE", "INSERT", "UPDATE"]
