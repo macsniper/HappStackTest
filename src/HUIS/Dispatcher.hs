@@ -9,6 +9,7 @@ import qualified Network.Gitit
 import HUIS.ConfigParser
 import Data.Map hiding(map)
 import Database.HDBC.ODBC
+import HUIS.Anniversary
 
 
 staticdirs:: [String]
@@ -34,7 +35,9 @@ runDispatcher conf wikiconf connection = msum
   -- simple QUERY interface
   , dir "simplequery" $ methodSP POST $ withData (simpleQueryResult connection)
   , dir "simplequery" $ methodSP GET $ showPage "Einfaches Query-Interface" simpleQueryForm
-  -- add other requests here
+  -- anniversary-query stuff
+  , dir "anniversary" $ methodSP POST $ withData (anniversaryResult connection)
+  , dir "anniversary" $ methodSP GET $ showPage "Anniversary Query" anniversaryForm
   ]
 
 serveStaticFile:: String-> String-> ServerPart Response

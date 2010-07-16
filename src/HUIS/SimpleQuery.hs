@@ -30,23 +30,12 @@ simpleQueryResult conn req = do
   result <- liftIO $ handleSqlError $ quickQuery conn (content req) []
   ok $ toResponse $ queryToHtml result
   
+-- | Generating HTML-Output from Query
 queryToHtml:: [[SqlValue]]-> Html
 queryToHtml stmt = thehtml <<
     [ header << headerContent "Einfaches Query-Interface"
     , body << concat [upperBody, simpleQueryForm, (resultTable stmt), lowerBody]]  
 
-
-resultTable:: [[SqlValue]]-> [Html]
-resultTable res = 
-  [table << map resultLine res]
-  
-resultLine:: [SqlValue]-> Html
-resultLine resline =
-  tr << map resultEntry resline
-  
-resultEntry:: SqlValue-> Html
-resultEntry val = td << (stringToHtml $ fromSql val)
-  
 
 instance FromData SimpleQuery where
   fromData = do
