@@ -20,7 +20,8 @@ Executable HUISServer
                   HDBC >= 2.2.6,
                   unix >= 2.4.0,
                   mtl >= 1.1,
-                  time >= 1.1.4
+                  time >= 1.1.4,
+                  convertible >= 1.0.9
   Main-Is:        Main.hs
   Hs-Source-Dirs: src
   other-modules:  HUIS.Dispatcher HUIS.StaticResponses HUIS.Server, HUIS.ConfigParser, HUIS.SimpleQuery, Paths_HUIS, HUIS.Reminder
