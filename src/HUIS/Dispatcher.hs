@@ -10,6 +10,7 @@ import HUIS.ConfigParser
 import Data.Map hiding(map)
 import Database.HDBC.ODBC
 import HUIS.Anniversary
+import HUIS.Reminder
 
 
 staticdirs:: [String]
@@ -38,6 +39,9 @@ runDispatcher conf wikiconf connection = msum
   -- anniversary-query stuff
   , dir "anniversary" $ methodSP POST $ withData (anniversaryResult connection)
   , dir "anniversary" $ methodSP GET $ showPage "Anniversary Query" anniversaryForm
+  -- reminder
+  --, dir "reminder" $ methodSP POST $ withData (reminderResult connection)
+  , dir "reminder" $ methodSP GET $ showPage "Reminder Query" reminderForm
   ]
 
 serveStaticFile:: String-> String-> ServerPart Response
