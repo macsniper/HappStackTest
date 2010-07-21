@@ -3,6 +3,7 @@ module HUIS.Database (connectDatabase, selectQuery, stripchars, resultTable) whe
 import Database.HDBC
 import Database.HDBC.ODBC
 import HUIS.ConfigParser(Config)
+import Data.Convertible.Base
 import Data.Map hiding(map)
 import Data.List(isInfixOf)
 import Text.XHtml.Transitional hiding ((!))
@@ -37,5 +38,12 @@ resultLine resline =
   tr << map resultEntry resline
   
 resultEntry:: SqlValue-> Html
-resultEntry val = td << (stringToHtml $ fromSql val)
+resultEntry val = td << (stringToHtml $ newFromSql $ safeFromSql val)
+
+newFromSql:: ConvertResult String -> String
+newFromSql s = 
+  case s of
+    Left b -> ""
+    Right a -> a
+
   
