@@ -11,7 +11,7 @@ import Data.Map hiding(map)
 import Database.HDBC.ODBC
 import HUIS.Anniversary
 import HUIS.Reminder
-
+import HUIS.Birthday
 
 staticdirs:: [String]
 staticdirs = ["js", "css", "img"]
@@ -39,6 +39,9 @@ runDispatcher conf wikiconf connection = msum
   -- anniversary-query stuff
   , dir "anniversary" $ methodSP POST $ withData (anniversaryResult connection)
   , dir "anniversary" $ methodSP GET $ showPage "Anniversary Query" anniversaryForm
+  -- birthday-query stuff
+  , dir "birthday" $ methodSP POST $ withData (birthdayResult connection)
+  , dir "birthday" $ methodSP GET $ showPage "Birthday Query" birthdayForm
   -- reminder
   --, dir "reminder" $ methodSP POST $ withData (reminderResult connection)
   , dir "reminder" $ methodSP GET $ showPage "Reminder Query" reminderForm
