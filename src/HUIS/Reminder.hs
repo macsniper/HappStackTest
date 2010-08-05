@@ -17,9 +17,9 @@ instance FromData Reminder where
   fromData = do
   user <- lookRead "user"
   frist <- lookRead "erledigen"
-  notiz <- look "inhalt" 
+  notiz <- look "inhalt"
   notizart <- lookRead "art"
-  return $ Reminder{userID = user, erledigen = frist, content = notiz, art = notizart}
+  return $ nullReminder{userID = user, erledigen = frist, content = notiz, art = notizart}
 
 nullReminder :: Reminder
 nullReminder = Reminder{userID = undefined
@@ -32,8 +32,8 @@ nullReminder = Reminder{userID = undefined
 
 
 reminderForm:: [Html]
-reminderForm = 
-  [ gui "/Reminder" << 
+reminderForm =
+  [ gui "/Reminder" <<
     [ label << "User"
     , textfield "user" ! [size "30", value ""]
     , label << "zu erledigen bis"
@@ -45,7 +45,7 @@ reminderForm =
     , submit "run" "starten" ]
   , thediv << "HUIS-Reminder"
   ]
-  
-  
-  
-  
+
+
+
+

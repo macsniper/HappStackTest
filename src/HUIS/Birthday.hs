@@ -10,21 +10,19 @@ import Control.Monad.Trans (MonadIO, liftIO)
 
 
 data DateRange = DateRange{from :: String,
-                           to :: String,
-                           number :: String}
+                           to :: String}
 
 instance FromData DateRange where
   fromData = do
   --regex zur datumsüberprüfung^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$
-  dateBeginn <- look "date1" 
+  dateBeginn <- look "date1"
   dateEnd <- look "date2"
-  --year <- look "years" --TODO: Check for correct Value
-  return $ DateRange{from = dateBeginn, to = dateEnd}-- number = year}
+  return $ DateRange{from = dateBeginn, to = dateEnd}
 
 
 birthdayForm:: [Html]
-birthdayForm = 
-  [ gui "/birthday" << 
+birthdayForm =
+  [ gui "/birthday" <<
     [ label << "Date start"
     , textfield "date1" ! [size "30", value "'yyyy-mm-dd'"]
     , label << "Date end"
