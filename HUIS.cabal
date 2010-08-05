@@ -3,7 +3,7 @@ Version:        0.1
 Synopsis:		Haskell University Information System
 Cabal-Version:  >= 1.2
 build-type: 	Simple
-data-files:     huis.conf, ressources/img/*.png, ressources/css/*.css, ressources/js/*.js
+data-files:     huis.conf, ressources/img/*.png, ressources/img/*.jpg, ressources/img/*.gif, ressources/css/*.css, ressources/js/*.js ressources/js/easySlider1.5.js
 
 Executable HUISServer
   Build-Depends:  happstack-server >= 0.4,
