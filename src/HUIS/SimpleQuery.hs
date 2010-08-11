@@ -8,33 +8,41 @@ import Happstack.Server
 import Control.Monad.Trans (MonadIO, liftIO)
 import HUIS.StaticResponses
 import Data.List
-import Data.Char
 
-data SimpleQuery = SimpleQuery{content :: String}
+data SimpleQuery = SimpleQuery{sel :: String,
+                               from :: String,
+                               whe :: String}
 
-simpleQueryForm:: [Html]
-simpleQueryForm = 
-  [ gui "/simplequery" << 
-    [ label << "SELECT "
-    , textfield "queryselect" ! [size "10", value "*"]
-    , label << "FROM"
-    , textfield "queryfrom" ! [size "20", value "table"]
-    , label << "WHERE"
-    , textfield "querywhere" ! [size "20", value "attribute"]
+nullQuery = SimpleQuery{sel = "*", from = "", whe = "1=1"}
+
+simpleQueryForm:: SimpleQuery -> [Html]
+simpleQueryForm query = [
+  thediv ! [theclass "Welcome"] << [
+    [ p << "Einfaches Query-Interface, nur SELECT-Abfragen moeglich.",
+      gui "/simplequery" <<
+    [ stringToHtml "SELECT "
+    , textfield "queryselect" ! [size "10", value (sel query)]
+    , br
+    , stringToHtml  "FROM"
+    , textfield "queryfrom" ! [size "20", value (from query)]
+    , br
+    , stringToHtml "WHERE"
+    , textfield "querywhere" ! [size "20", value (whe query)]
+    , br
     , submit "run" "starten" ]
-  , thediv << "Einfaches Query-Interface, nur SELECT-Abfragen moeglich."
+    ]
   ]
+  ]
+
 
 simpleQueryResult:: Connection-> SimpleQuery-> ServerPart Response
 simpleQueryResult conn req = do
-  result <- liftIO $ handleSqlError $ quickQuery conn (content req) []
-  ok $ toResponse $ queryToHtml result
-  
--- | Generating HTML-Output from Query
-queryToHtml:: [[SqlValue]]-> Html
-queryToHtml stmt = thehtml <<
-    [ header << headerContent "Einfaches Query-Interface"
-    , body << concat [upperBody, simpleQueryForm, (resultTable stmt), lowerBody]]  
+  result <- liftIO $ handleSqlError $ quickQuery conn (buildQuery req) []
+  queryToHtml result (simpleQueryForm req)
+
+
+buildQuery:: SimpleQuery -> String
+buildQuery a = "SELECT " ++ sel a ++ " FROM " ++ from a ++ " WHERE " ++ whe a ++ ";"
 
 
 instance FromData SimpleQuery where
@@ -42,14 +50,5 @@ instance FromData SimpleQuery where
     queryS <- look "queryselect"
     queryF <- look "queryfrom"
     queryW <- look "querywhere"
-    let query = queryOnly $ "SELECT " ++ queryS ++ " FROM " ++ queryF ++ " WHERE " ++ queryW
-    return SimpleQuery{content = query}
+    return SimpleQuery{sel = queryOnly queryS, from = queryOnly queryF, whe = queryOnly queryW}
 
--- | Checks for bad keywords ("DROP", "DELETE", "INSERT", "UPDATE" etc)
-queryOnly:: String-> String
-queryOnly [] = []
-queryOnly s =
-  if [True] `isInfixOf` ( map (\st -> st `isInfixOf` (map toUpper s)) disallowed)
-  then ""
-  else s
-  where disallowed = ["DROP", "DELETE", "INSERT", "UPDATE"]

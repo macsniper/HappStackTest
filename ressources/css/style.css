@@ -59,6 +59,8 @@ a:hover { text-decoration:none;}
 .body em { color:#666666;}
 .body p { font:normal 11px Arial, Helvetica, sans-serif; color:#fff; line-height:1.8em; padding:2px 5px;}
 .body p.gray { color:#c4c4c4;}
+.body table { color:#fff}
+.body form { color:#fff}
 .body span { line-height:1.8em;}
 .body_resize { width:960px; margin:20px auto; padding:0;}
 .body a { }
@@ -115,3 +117,6 @@ p#controls { margin:0; position:relative; }
 #nextBtn { left:75px; }
 #prevBtn a { display:block; width:69px; height:23px; background:url(/ressources/img/next_topic.gif) no-repeat 0 0; }
 #nextBtn a { display:block; width:69px; height:23px; background:url(/ressources/img/Prev_topic.gif) no-repeat 0 0; }
+
+
+/* custom stylesheets */

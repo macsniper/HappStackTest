@@ -3,7 +3,7 @@ module HUIS.Birthday where
 import Text.XHtml.Transitional hiding (dir,content)
 import Happstack.Server
 import HUIS.Database
-import HUIS.SimpleQuery
+import HUIS.StaticResponses
 import Database.HDBC
 import Database.HDBC.ODBC
 import Control.Monad.Trans (MonadIO, liftIO)
@@ -37,4 +37,4 @@ birthdayResult:: Connection-> DateRange-> ServerPart Response
 birthdayResult conn temp = do
   let querystring = "SELECT pgd_titel, pgd_vorname, pgd_name, pgd_strasse, pgd_plz, pgd_wohnort, (EXTRACT(YEAR FROM CURRENT_DATE)-EXRACT(YEAR FROM pgd_geburtsdatum)) as alter FROM pgd WHERE pgd_geburtsdatum BETWEEN dateBegin AND dateEnd"
   result <- liftIO $ handleSqlError $ quickQuery conn querystring []
-  ok $ toResponse $ queryToHtml result
+  queryToHtml result birthdayForm

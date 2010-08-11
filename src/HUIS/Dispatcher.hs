@@ -35,7 +35,7 @@ runDispatcher conf wikiconf connection = msum
   , dir "_login" $ seeOther (conf ! "wikidir" ++ "_login") $ toResponse()
   -- simple QUERY interface
   , dir "simplequery" $ methodSP POST $ withData (simpleQueryResult connection)
-  , dir "simplequery" $ methodSP GET $ showPage "Einfaches Query-Interface" "/" simpleQueryForm
+  , dir "simplequery" $ methodSP GET $ showPage "Einfaches Query-Interface" "/" (simpleQueryForm nullQuery)
   -- anniversary-query stuff
   , dir "anniversary" $ methodSP POST $ withData (anniversaryResult connection)
   , dir "anniversary" $ methodSP GET $ showPage "Anniversary Query" "/" anniversaryForm
