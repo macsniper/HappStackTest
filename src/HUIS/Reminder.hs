@@ -12,7 +12,7 @@ data Reminder = Reminder{userID :: Integer
                         ,bearbeitet :: UTCTime
                         ,erledigen :: UTCTime
                         ,erledigt :: Bool
-                        ,art :: Int
+                        ,art :: String
                         ,content :: String}
 
 instance FromData Reminder where
@@ -37,13 +37,25 @@ reminderForm:: [Html]
 reminderForm =
   [ gui "/Reminder" <<
     [ label << "User"
-    , textfield "user" ! [size "30", value ""]
+    , textfield "user" ! [size "30", value "Bitte Name eingeben"]
+    , br
     , label << "zu erledigen bis"
-    , textfield "erledigen" ! [size "30", value ""]
+    , textfield "erledigen" ! [size "30", value "yyyy-mm-dd"]
+    , br
     , label << "Inhalt"
-    , textfield "inhalt" ! [size "30", value ""]
+    , br
+    , textarea  ! [ name "inhalt"
+                  , rows "10"
+                  , cols "40" ] << [ "Text eingeben" ]
+    , br
     , label << "Art der Notiz"
-    , textfield "art" ! [size "30", value ""]
+    , select ! [name "art"] << [ option << p << "Telefonnotiz"
+                               , option << p << "Gesprächsnotiz"
+                               , option << p << "Geburtsurkunde"
+                               , option << p << "Elternzeitantrag"
+                               , option << p << "sonstige Hinweise"
+                               ]
+    , br
     , submit "run" "anlegen" ]
   , thediv << "HUIS-Reminder"
   ]
