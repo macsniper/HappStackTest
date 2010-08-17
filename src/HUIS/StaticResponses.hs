@@ -31,7 +31,7 @@ startPageContent =
         td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
         td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/birthday"] << "Geburtstagsliste",
         td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
-        td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/anniversary"] << "Jubiläen",
+        td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/anniversary"] << "Jubil��en",
         td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
         td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/simplequery"] << "Datenbankabfrage"
       ]
@@ -67,7 +67,7 @@ helpContent =  [
         td ! [colspan 2, align "center"] << thediv ! [theclass "bg"] << noHtml
       ],
       tr << [
-        td ! [colspan 2] << h3 << "Übersicht"
+        td ! [colspan 2] << h3 << "��bersicht"
       ],
       tr << [
         td << noHtml,
@@ -149,7 +149,7 @@ footer = [
       thediv ! [theclass "resize"] << [
         thediv << [
           br,
-          anchor ! [href "#"] << "zurück zum Anfang"
+          anchor ! [href "#"] << "zur��ck zum Anfang"
         ]
       ], p ! [theclass "clr"] << noHtml
     ]
@@ -164,9 +164,9 @@ contentWrap content = [
 
 
 -- | Generating HTML-Output from Query
-queryToHtml:: [[SqlValue]]-> [Html]-> ServerPart Response
-queryToHtml stmt req =
-  showPage "Ergebnisse der Anfrage" (req ++ resultTable stmt)
+queryToHtml:: [String] -> [[SqlValue]]-> [Html]-> ServerPart Response
+queryToHtml col stmt req =
+  showPage "Ergebnisse der Anfrage" "/" (req ++ resultTable col stmt)
 
 
 -- | Function for the upper-body-part (e.g. menu) of every page.
@@ -184,9 +184,12 @@ lowerBody =
 
 
 
-resultTable:: [[SqlValue]]-> [Html]
-resultTable res =
-  [table ! [theclass "resulttable"] << map resultLine res]
+resultTable:: [String] -> [[SqlValue]]-> [Html]
+resultTable col res =
+  [table ! [theclass "resulttable"] << (map colValue col ++ map resultLine res)]
+
+colValue:: String -> Html
+colValue val = td << strong << val 
 
 resultLine:: [SqlValue]-> Html
 resultLine resline =

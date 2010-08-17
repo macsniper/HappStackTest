@@ -42,8 +42,12 @@ simpleQueryForm query = [
 
 simpleQueryResult:: Connection-> SimpleQuery-> ServerPart Response
 simpleQueryResult conn req = do
-  result <- liftIO $ handleSqlError $ quickQuery conn (buildQuery req) []
-  queryToHtml result (simpleQueryForm req)
+  stmt <- liftIO $ handleSqlError $ prepare conn (buildQuery req)
+  columns <- liftIO $ handleSqlError $ getColumnNames stmt
+  liftIO $ handleSqlError $ execute stmt []
+  result <- liftIO $ handleSqlError $ fetchAllRows stmt
+  --result <- liftIO $ handleSqlError $ quickQuery conn (buildQuery req) []
+  queryToHtml columns result (simpleQueryForm req)
 
 
 buildQuery:: SimpleQuery -> String

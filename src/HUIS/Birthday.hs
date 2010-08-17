@@ -14,7 +14,7 @@ data DateRange = DateRange{from :: String,
 
 instance FromData DateRange where
   fromData = do
-  --regex zur datumsüberprüfung^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$
+  --regex zur datums��berpr��fung^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$
   dateBeginn <- look "date1"
   dateEnd <- look "date2"
   return $ DateRange{from = dateBeginn, to = dateEnd}
@@ -37,4 +37,4 @@ birthdayResult:: Connection-> DateRange-> ServerPart Response
 birthdayResult conn temp = do
   let querystring = "SELECT pgd_titel, pgd_vorname, pgd_name, pgd_strasse, pgd_plz, pgd_wohnort, (EXTRACT(YEAR FROM CURRENT_DATE)-EXRACT(YEAR FROM pgd_geburtsdatum)) as alter FROM pgd WHERE pgd_geburtsdatum BETWEEN dateBegin AND dateEnd"
   result <- liftIO $ handleSqlError $ quickQuery conn querystring []
-  queryToHtml result birthdayForm
+  queryToHtml [] result birthdayForm
