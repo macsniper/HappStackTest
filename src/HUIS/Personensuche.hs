@@ -30,6 +30,7 @@ personensucheForm =
 
 personensucheResult:: Connection-> Personensuche -> ServerPart Response
 personensucheResult conn req = do
+  let query= "SELECT pgd_vorname, pgd_name FROM pgd WHERE pgd_vorname=vn AND pgd_nachname=nn OR WHERE pdg_nachname=nn"
   result <- liftIO $ handleSqlError $ quickQuery conn (content req) []
   ok $ toResponse $ queryyToHtml result
 
@@ -44,8 +45,5 @@ instance FromData Personensuche where
  fromData = do
     personenid <- look "personenid"
     gesamtName <- look "gesamtName"
-    let query= "personenid " ++ personenid ++ " gesamtName " ++ gesamtName
-    return Personensuche{content = query}
-
-
-
+    let query=whereQueryZu gesamtName
+     return Personensuche{content = query}
