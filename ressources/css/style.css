@@ -34,7 +34,7 @@ a:hover { text-decoration:none;}
 .slider div p { font:normal 11px Arial, Helvetica, sans-serif; color:#9ccef1; margin:0; line-height:1.8em; padding:5px 10px;}
 .slider div p.img { float:right; padding:0 42px 0 0; margin:0;}
 /*title text*/
-.slider2 { background: url(/ressources/img/slider_bg2.jpg) top repeat-x; margin:0 auto; padding:0; height:106px;}
+.slider2 { background: url(/ressources/img/slider_bg2.jpg) top repeat-x; margin:0 auto; padding:0; height:56px;}
 .slider2_resize { width:970px; margin:0 auto; padding:0;}
 .slider2_resize h2 { font:normal 28px Tahoma, Geneva, sans-serif; color:#fff; margin:0; padding:10px 10px 10px 10px; line-height:1.2em;}
 .slider2_resize p { font:normal 11px Arial, Helvetica, sans-serif; color:#9ccef1; margin:0; line-height:1.8em; padding:5px 10px;}
@@ -102,21 +102,6 @@ p.response { text-align:center; color:red; font:bold 11px Arial, Helvetica, sans
 p.clr, .clr { clear:both; padding:0; margin:0; background:none;}
 li.bg, .bg { clear:both; border-top:1px dashed #808080; padding:0; margin:5px 0; background:none;}
 li.bg2, .bg2 { clear:both; border-top:2px solid #3d3d3d; padding:0; margin:5px 0; background:none;}
-
-#slider { margin:0; padding:0; list-style:none; }
-#slider ul,
-#slider li { margin:0; padding:0; list-style:none; }
-/*
-    define width and height of list item (slide)
-    entire slider area will adjust according to the parameters provided here
-*/
-#slider li { width:978px; height:212px !important; height:206px; overflow:hidden; }
-p#controls { margin:0; position:relative; }
-#prevBtn,
-#nextBtn { display:block; margin:0; overflow:hidden; width:69px; height:23px; position:absolute; left:0; top:-50px; }
-#nextBtn { left:75px; }
-#prevBtn a { display:block; width:69px; height:23px; background:url(/ressources/img/next_topic.gif) no-repeat 0 0; }
-#nextBtn a { display:block; width:69px; height:23px; background:url(/ressources/img/Prev_topic.gif) no-repeat 0 0; }
 
 
 /* custom stylesheets */

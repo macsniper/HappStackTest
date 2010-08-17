@@ -20,18 +20,23 @@ simpleQueryForm query = [
   thediv ! [theclass "Welcome"] << [
     [ p << "Einfaches Query-Interface, nur SELECT-Abfragen moeglich.",
       gui "/simplequery" <<
-    [ stringToHtml "SELECT "
-    , textfield "queryselect" ! [size "10", value (sel query)]
-    , br
-    , stringToHtml  "FROM"
-    , textfield "queryfrom" ! [size "20", value (from query)]
-    , br
-    , stringToHtml "WHERE"
-    , textfield "querywhere" ! [size "20", value (whe query)]
-    , br
-    , submit "run" "starten" ]
+        [ table << [
+          tr << [
+            td ! [theclass "entry"] << stringToHtml "SELECT ",
+            td << textfield "queryselect" ! [size "10", value (sel query)]
+          ],
+          tr << [
+            td ! [theclass "entry"] << stringToHtml "FROM ",
+            td << textfield "queryfrom" ! [size "20", value (from query)]
+          ],
+          tr << [
+            td ! [theclass "entry"] << stringToHtml "WHERE ",
+            td << textfield "querywhere" ! [size "20", value (whe query)]
+          ]
+         ]
+        ]
+      ]
     ]
-  ]
   ]
 
 

@@ -14,61 +14,29 @@ showStartPage:: ServerPart Response
 showStartPage =
   ok $ toResponse $ thehtml <<
     [ header << headerContent "HUIS-Startseite"
-    , body << thediv ! [theclass "main"] << concat [(bodyHeader "/"), slider, bgforsearch, contentWrap startPageContent, footer]]
+    , body << thediv ! [theclass "main"] << concat [(bodyHeader), slider2 "Startseite", bgforsearch, contentWrap startPageContent, footer]]
 
 
 startPageContent:: [Html]
 startPageContent =
-  concat [
-    startPageWelcomeContent,
-    newsContent,
-    [thediv ! [theclass "clr"] << noHtml, thediv ! [theclass "bg2"] << noHtml],
-    serviceContent,
-    comments
-  ]
-
-startPageWelcomeContent:: [Html]
-startPageWelcomeContent = [
-    thediv ! [theclass "Welcome"] << [
-      h2 << "Willkommen bei HUIS",
-      thediv ! [theclass "bg"] << noHtml,
-      p << "Was wir sind und was wir machen...",
-      p << "Vorteile von HUIS",
-      p << "Wozu HUIS da ist...",
-      p << anchor ! [href "/help"] << "Hier gibts mehr"
+  [
+    table ! [width "100%"] << [
+      tr << [
+        td ! [colspan 6, align "center"] << h2 << "Willkommen bei HUIS"
+      ],
+      tr << [
+        td ! [colspan 6, align "center"] << thediv ! [theclass "bg"] << noHtml
+      ],
+      tr << [
+        td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
+        td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/birthday"] << "Geburtstagsliste",
+        td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
+        td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/anniversary"] << "Jubiläen",
+        td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
+        td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/simplequery"] << "Datenbankabfrage"
+      ]
     ]
   ]
-
-newsContent:: [Html]
-newsContent = [
-    thediv ! [theclass "Latest"] << [
-      h2 << "Neuigkeiten",
-      thediv ! [theclass "bg"] << noHtml,
-      thediv ! [theclass "data"] << "01.05.2010",
-      p << " ",
-      p << "HUIS geht online",
-      thediv ! [theclass "bg"] << noHtml,
-      thediv ! [theclass "data"] << "01.0.2010",
-      p << " ",
-      p << "Patch 1.2.3 geht online"
-    ]
-  ]
-
-
-serviceContent:: [Html]
-serviceContent = [
-    thediv ! [theclass "Welcome"] << [
-      h2 << "Unser Service",
-      thediv ! [theclass "bg"] << noHtml,
-      p << "Alles rund um Personalverwaltung",
-      h3 << "Service 1",
-      thediv ! [theclass "bg"] << noHtml,
-      image ! [src "/ressources/img/Serv_1.gif", width "54", height "54", alt "Service 1"],
-      thediv ! [theclass "bg"] << noHtml
-    ]
-  ]
-
-comments = [noHtml]
 
 -- | Serves a file, identified by 'filedir' (without trailing \/) and 'filename'.
 showFile:: String-> String-> ServerPart Response
@@ -77,16 +45,36 @@ showFile filedir filename =
 
 -- | Main function for serving a static web page. Build the site from functions defined in this module ('headerContent', 'upperBody', 'lowerBody')
 -- | and expects a title and a function returning the contents of the site.
-showPage:: String-> String-> [Html]-> ServerPart Response
-showPage title location content =
+showPage:: String-> [Html]-> ServerPart Response
+showPage title content =
   ok $ toResponse $ thehtml <<
     [ header << headerContent title
-    , body << thediv ! [theclass "main"] << concat [(bodyHeader location), slider2 title, bgforsearch, contentWrap content, footer]]
+    , body << thediv ! [theclass "main"] << concat [bodyHeader, slider2 title, bgforsearch, contentWrap content, footer]]
 
 
 showPageWithData:: String-> (a -> [Html])-> a -> ServerPart Response
 showPageWithData title content reqdata =
-  showPage title  "/"  (content reqdata)
+  showPage title (content reqdata)
+
+
+helpContent:: [Html]
+helpContent =  [
+    table ! [width "100%"] << [
+      tr << [
+        td ! [colspan 2, align "center"] << h2 << "HUIS-Hilfe"
+      ],
+      tr << [
+        td ! [colspan 2, align "center"] << thediv ! [theclass "bg"] << noHtml
+      ],
+      tr << [
+        td ! [colspan 2] << h3 << "Übersicht"
+      ],
+      tr << [
+        td << noHtml,
+        td << "folgt bald..."
+      ]
+    ]
+  ]
 
 -- | Function for the header-part of every page.
 headerContent:: String-> [Html]
@@ -99,8 +87,8 @@ headerContent title =
   ]
 
 
-bodyHeader:: String-> [Html]
-bodyHeader active =
+bodyHeader:: [Html]
+bodyHeader =
   [thediv ! [theclass "header"] << [
       thediv ! [theclass "block_header"] << [
         thediv ! [theclass "logo"] << [
@@ -111,58 +99,21 @@ bodyHeader active =
         thediv ! [thestyle "float:right"] << [
           thediv ! [theclass "menu"] << [
             ulist <<
-              [li << anchor ! [href "/simplequery"] << [
-                thespan << "Query"
+              [li << anchor ! [href "/"] << [
+                thespan << "Start"
               ]
               ,li << noHtml
               ,li << anchor ! [href "/wiki"] << [
                 thespan << "Wiki"
               ]
               ,li << noHtml
-              ,li << anchor ! [href "/anniversary"] << [
-                thespan << "Jubiläen"
+              ,li << anchor ! [href "/help"] << [
+                thespan << "Hilfe"
               ]
             ]
           ]
         ],
         thediv ! [theclass "clr"] << noHtml
-      ]
-    ]
-  ]
-
-slider:: [Html]
-slider = [
-  thediv ! [theclass "slider"] << [
-    thediv ! [theclass "slider_resize"] << [
-        thediv ! [identifier "slider"] << [
-          ulist << [
-            li << [
-              thediv << [
-                p ! [theclass "img"] << [
-                  image ! [src "/ressources/img/simple_text_img_1.png", alt "screen 1", width "251", height "205"]
-                ],
-                h2 << "Verwalten ...",
-                p << "ganz einfach mit dem neuen HUiS der Uni Duisburg - Essen !"
-              ]
-            ],li << [
-              thediv << [
-                p ! [theclass "img"] << [
-                  image ! [src "/ressources/img/simple_text_img_1.png", alt "screen 1", width "251", height "205"]
-                ],
-                h2 << "Verwalten ...",
-                p << "ganz einfach mit dem neuen HUiS der Uni Duisburg - Essen !"
-              ]
-            ],li << [
-              thediv << [
-                p ! [theclass "img"] << [
-                  image ! [src "/ressources/img/simple_text_img_1.png", alt "screen 1", width "251", height "205"]
-                ],
-                h2 << "Verwalten ...",
-                p << "ganz einfach mit dem neuen HUiS der Uni Duisburg - Essen !"
-              ]
-            ]
-          ]
-        ]
       ]
     ]
   ]
@@ -215,7 +166,7 @@ contentWrap content = [
 -- | Generating HTML-Output from Query
 queryToHtml:: [[SqlValue]]-> [Html]-> ServerPart Response
 queryToHtml stmt req =
-  showPage "Ergebnisse der Anfrage" "/" (req ++ resultTable stmt)
+  showPage "Ergebnisse der Anfrage" (req ++ resultTable stmt)
 
 
 -- | Function for the upper-body-part (e.g. menu) of every page.
