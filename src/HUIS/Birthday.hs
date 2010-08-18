@@ -19,16 +19,31 @@ instance FromData DateRange where
   dateEnd <- look "date2"
   return $ DateRange{from = dateBegin, to = dateEnd}
 
+nullDateRange = DateRange{from = "yyyy-mm-dd", to = "yyyy-mm-dd"}
 
-birthdayForm:: [Html]
-birthdayForm =
-  [ gui "/birthday" <<
-    [ label << "Startdatum"
-    , textfield "date1" ! [size "30", value "yyyy-mm-dd"]
-    , label << "Enddatum"
-    , textfield "date2" ! [size "30", value "yyyy-mm-dd"]
-    , submit "run" "starten" ]
-  , thediv << "HUIS-Birthday"
+birthdayForm:: DateRange-> [Html]
+birthdayForm formdata =
+  [gui "/birthday" <<
+        [
+      table ! [width "100%"] << [
+        tr << [
+          td ! [colspan 2, align "center"] << h2 << "Geburtstagsübersicht"
+        ],
+        tr << [
+          td ! [colspan 2, align "center"] << thediv ! [theclass "bg"] << noHtml
+        ],
+        tr << [
+          td ! [thestyle "width: 115px;"] << label << "Startdatum",
+          td ! [thestyle "width: 115px;"] << textfield "date1" ! [size "30", value $ from formdata]
+        ],tr << [
+          td ! [thestyle "width: 115px;"] << label << "Enddatum",
+          td ! [thestyle "width: 115px;"] << textfield "date2" ! [size "30", value $ to formdata]
+        ],tr << [
+          td << noHtml,
+          td << submit "run" "Geburtstage anzeigen"
+        ]
+      ]
+    ]
   ]
 
 mmDdOfDate:: String-> (String,String)
@@ -48,4 +63,4 @@ birthdayResult conn dateRange = do
                     ++ " WHERE ((MONTH(pgd_geburtsdatum) BETWEEN (" ++ gebMonMin ++ " AND " ++ gebMonMax ++ ")"
                     ++ " AND (DAY(pgd_geburtsdatum) BETWEEN (" ++ gebDayMin ++ " AND " ++ gebDayMax ++ "))"
   result <- liftIO $ handleSqlError $ quickQuery conn querystring []
-  queryToHtml [] result birthdayForm
+  queryToHtml [] result $ birthdayForm nullDateRange
