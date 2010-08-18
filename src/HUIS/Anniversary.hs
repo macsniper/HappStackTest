@@ -81,14 +81,14 @@ convertResult [gender,name,namebestand,leeresfeld,vornamen,strasse,plz,ort,datum
 
 selectGender:: SqlValue-> SqlValue
 selectGender gen =
-  if fromSql gen == "M"
+  if (newFromSql $ safeFromSql gen) == "M"
   then toSql "Herr"
   else toSql "Frau"
 
 selectDate:: SqlValue-> SqlValue -> SqlValue -> SqlValue
 selectDate datum1 datum2 datum3 =
-  if fromSql datum1 /= ""
+  if (newFromSql $ safeFromSql datum1) /= ""
   then datum1
-  else if fromSql datum2 /= ""
+  else if (newFromSql $ safeFromSql datum2) /= ""
        then datum2
        else datum3
