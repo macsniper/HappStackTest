@@ -64,4 +64,4 @@ birthdayResult conn dateRange = do
                     ++ " OR (MONTH(pgd_geburtsdatum) = " ++ gebMonMin ++ " AND DAY(pgd_geburtsdatum) >= " ++ gebDayMin ++ ")"
                     ++ " OR (MONTH(pgd_geburtsdatum) = " ++ gebMonMax ++ " AND DAY(pgd_geburtsdatum) <= " ++ gebDayMax ++ ");"
   result <- liftIO $ handleSqlError $ quickQuery conn querystring []
-  queryToHtml ["Titel", "Vorname(n)", "Zus.", "Nachname", "Straße", "PLZ", "Ort", "Alter"] result $ birthdayForm nullDateRange
+  queryToHtml ["Titel", "Vorname(n)", "Zus.", "Nachname", "Institut", "Alter"] result $ birthdayForm nullDateRange
