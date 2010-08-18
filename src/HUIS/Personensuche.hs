@@ -43,7 +43,6 @@ queryyToHtml stmt = thehtml <<
 
 instance FromData Personensuche where
  fromData = do
-    personenid <- look "personenid"
-    gesamtName <- look "gesamtName"
+    gesamtName <- look "eingabefeld"
     let query=whereQueryZu gesamtName
      return Personensuche{content = query}

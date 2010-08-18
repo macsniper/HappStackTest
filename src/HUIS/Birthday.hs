@@ -19,7 +19,7 @@ instance FromData DateRange where
   dateEnd <- look "date2"
   return $ DateRange{from = dateBegin, to = dateEnd}
 
-nullDateRange = DateRange{from = "yyyy-mm-dd", to = "yyyy-mm-dd"}
+nullDateRange = DateRange{from = "JJJJ-MM-TT", to = "JJJJ-MM-TT"}
 
 birthdayForm:: DateRange-> [Html]
 birthdayForm formdata =
@@ -27,7 +27,7 @@ birthdayForm formdata =
         [
       table ! [width "100%"] << [
         tr << [
-          td ! [colspan 2, align "center"] << h2 << "Geburtstagsübersicht"
+          td ! [colspan 2, align "center"] << h2 << "Geburtstagsliste"
         ],
         tr << [
           td ! [colspan 2, align "center"] << thediv ! [theclass "bg"] << noHtml
@@ -57,10 +57,11 @@ birthdayResult:: Connection-> DateRange-> ServerPart Response
 birthdayResult conn dateRange = do
   let (gebMonMin,gebDayMin) = mmDdOfDate $ from dateRange
       (gebMonMax,gebDayMax) = mmDdOfDate $ to dateRange
-      querystring = "SELECT pgd_titel, pgd_vornamen, pgd_name, pgd_strasse, pgd_plz, pgd_wohnort"
+      querystring = "SELECT druck_anredetitelm, pgd_vornamen,pgd_namenbestand, pgd_name, lname1"
                     ++ ", (YEAR(CURRENT)-YEAR(pgd_geburtsdatum)) as alter"
-                    ++ " FROM pgd"
-                    ++ " WHERE ((MONTH(pgd_geburtsdatum) BETWEEN (" ++ gebMonMin ++ " AND " ++ gebMonMax ++ ")"
-                    ++ " AND (DAY(pgd_geburtsdatum) BETWEEN (" ++ gebDayMin ++ " AND " ++ gebDayMax ++ "));"
+                    ++ " FROM ((pgd left outer join k_anredetitel on (pgd.pgd_titel = k_anredetitel.key_anredetitel)) left outer join pfi on (pgd.pgd_join_id = pfi.pfi_pgd_join_id AND pfi.pfi_bis > CURRENT)) left outer join inst on (pfi.poz_institut = inst.inst_nr)"
+                    ++ " WHERE (MONTH(pgd_geburtsdatum) > " ++ gebMonMin ++ " AND MONTH(pgd_geburtsdatum) < " ++ gebMonMax ++ ")"
+                    ++ " OR (MONTH(pgd_geburtsdatum) = " ++ gebMonMin ++ " AND DAY(pgd_geburtsdatum) >= " ++ gebDayMin ++ ")"
+                    ++ " OR (MONTH(pgd_geburtsdatum) = " ++ gebMonMax ++ " AND DAY(pgd_geburtsdatum) <= " ++ gebDayMax ++ ");"
   result <- liftIO $ handleSqlError $ quickQuery conn querystring []
-  queryToHtml ["Titel", "Vorname(n)", "Nachname", "Straße", "PLZ", "Ort", "Alter"] result $ birthdayForm nullDateRange
+  queryToHtml ["Titel", "Vorname(n)", "Zus.", "Nachname", "Straße", "PLZ", "Ort", "Alter"] result $ birthdayForm nullDateRange

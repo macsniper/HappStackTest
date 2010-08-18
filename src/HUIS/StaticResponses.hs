@@ -28,11 +28,11 @@ startPageContent =
         td ! [colspan 6, align "center"] << thediv ! [theclass "bg"] << noHtml
       ],
       tr << [
-        td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
+        td ! [thestyle "width: 115px;"] << anchor ! [href "/birthday"]<< image ! [src "/ressources/img/geb.jpg"],
         td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/birthday"] << "Geburtstagsliste",
-        td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
+        td ! [thestyle "width: 115px;"] << anchor ! [href "/anniversary"]<< image ! [src "/ressources/img/jubi.jpg"],
         td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/anniversary"] << "Jubiläen",
-        td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
+        td ! [thestyle "width: 115px;"] << anchor ! [href "/simplequery"]<< image ! [src "/ressources/img/query.jpg"],
         td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/simplequery"] << "Datenbankabfrage"
       ]
     ]
@@ -127,19 +127,20 @@ slider2 headl = [
   ]
 
 bgforsearch:: [Html]
-bgforsearch = [
-    thediv ! [theclass "bg_for_search"] << [
-      thediv ! [theclass "bg_for_search_resize"] << [
-        thediv ! [theclass "search"] << [
-          gui "/search" ! [identifier "form2", name "form2"] << [
-            strong << stringToHtml "Suche:",
-            input ! [thetype "text", name "eingabefeld", identifier "textfield", theclass "text"],
-            input ! [thetype "image", name "imageField", identifier "imageField", src "/ressources/img/search.gif", theclass "button_search"]
-          ]
-        ]
-      ]
-    ]
-  ]
+bgforsearch = --[
+  [noHtml]
+--    thediv ! [theclass "bg_for_search"] << [
+--      thediv ! [theclass "bg_for_search_resize"] << [
+--        thediv ! [theclass "search"] << [
+--          gui "/search" ! [identifier "form2", name "form2"] << [
+--            strong << stringToHtml "Suche:",
+--            input ! [thetype "text", name "eingabefeld", identifier "textfield", theclass "text"],
+--            input ! [thetype "image", name "imageField", identifier "imageField", src "/ressources/img/search.gif", theclass "button_search"]
+--          ]
+--        ]
+--      ]
+--    ]
+--  ]
 
 footer:: [Html]
 footer = [

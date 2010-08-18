@@ -13,7 +13,7 @@ data DateRangeN = DateRangeN{from :: String,
                            to :: String,
                            number :: String}
 
-nullDateRangeN = DateRangeN{from = "yyyy-mm-dd", to = "yyyy-mm-dd", number = "25"}
+nullDateRangeN = DateRangeN{from = "JJJJ-MM-TT", to = "JJJJ-MM-TT", number = "25"}
 
 instance FromData DateRangeN where
   fromData = do

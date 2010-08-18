@@ -28,13 +28,13 @@ simpleQueryForm query =
         ],
         tr << [
           td ! [thestyle "width: 115px;"] << label << "SELECT ",
-          td ! [thestyle "width: 115px;"] << textfield "queryselect" ! [size "10", value $ sel query]
+          td ! [thestyle "width: 115px;"] << textfield "queryselect" ! [size "40", value $ sel query]
         ],tr << [
           td ! [thestyle "width: 115px;"] << label << "FROM ",
-          td ! [thestyle "width: 115px;"] << textfield "queryfrom" ! [size "20", value $ from query]
+          td ! [thestyle "width: 115px;"] << textfield "queryfrom" ! [size "40", value $ from query]
         ], tr << [
           td ! [thestyle "width: 115px;"] << label << "WHERE",
-          td ! [thestyle "width: 115px;"] << textfield "querywhere" ! [size "20", value $ whe query]
+          td ! [thestyle "width: 115px;"] << textfield "querywhere" ! [size "40", value $ whe query]
         ],tr << [
           td << noHtml,
           td << submit "run" "ausführen"
