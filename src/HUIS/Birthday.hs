@@ -61,6 +61,6 @@ birthdayResult conn dateRange = do
                     ++ ", (YEAR(CURRENT)-YEAR(pgd_geburtsdatum)) as alter"
                     ++ " FROM pgd"
                     ++ " WHERE ((MONTH(pgd_geburtsdatum) BETWEEN (" ++ gebMonMin ++ " AND " ++ gebMonMax ++ ")"
-                    ++ " AND (DAY(pgd_geburtsdatum) BETWEEN (" ++ gebDayMin ++ " AND " ++ gebDayMax ++ "))"
+                    ++ " AND (DAY(pgd_geburtsdatum) BETWEEN (" ++ gebDayMin ++ " AND " ++ gebDayMax ++ "));"
   result <- liftIO $ handleSqlError $ quickQuery conn querystring []
-  queryToHtml [] result $ birthdayForm nullDateRange
+  queryToHtml ["Titel", "Vorname(n)", "Nachname", "Straße", "PLZ", "Ort", "Alter"] result $ birthdayForm nullDateRange

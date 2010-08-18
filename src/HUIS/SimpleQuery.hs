@@ -54,7 +54,7 @@ simpleQueryResult conn req = do
 
 
 buildQuery:: SimpleQuery -> String
-buildQuery a = "SELECT " ++ sel a ++ " FROM " ++ from a ++ " WHERE " ++ whe a ++ ";"
+buildQuery a = "SELECT FIRST 100" ++ sel a ++ " FROM " ++ from a ++ " WHERE " ++ whe a ++ ";"
 
 
 instance FromData SimpleQuery where
