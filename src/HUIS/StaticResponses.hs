@@ -67,11 +67,25 @@ helpContent =  [
         td ! [colspan 2, align "center"] << thediv ! [theclass "bg"] << noHtml
       ],
       tr << [
-        td ! [colspan 2] << h3 << "Übersicht"
+        td ! [colspan 2] << h3 << "Was ist die Geburtstagsliste und wie funktioniert sie?"
       ],
       tr << [
         td << noHtml,
-        td << "folgt bald..."
+        td << "Mit der Geburtstagsliste kann man Personen, die in einem bestimmten Zeitraum Geburtstag haben, aus der Datenbank auslesen. Hierzu muss man den Anfangszeitpunkt sowie den Endzeitpunkt für den gewünschten Zeitraum angeben und danach auf den Knopf 'Geburtstage anzeigen' klicken. Daraufhin bekommt man die Vornamen, Nachnamen, Organisationseinheiten sowie das Alter (nach Beendigung des Geburtstages) der Personen, die in dem angegebenen Zeitraum Geburtstag haben."
+      ],
+      tr << [
+        td ! [colspan 2] << h3 << "Was ist die Jubiläenfunktion und wie benutze ich sie?"
+      ],
+      tr << [
+        td << noHtml,
+        td << "Mit der Jubiläenfunktion kann man Personen aus der Datenbank auslesen, welche in einem vorgegebenen Zeitraum ein bestimmtes Jubiläum feiern. Hierzu gibt man den Anfangs- und Endzeitpunkt des Zeitraumes an, in dem die Jubiläen stattfinden sollen. Hierbei ist zu beachten die Eingabe im Format JJJJ-MM-TT zu tätigen, also z.B. 2010-08-27. Anschließend kann man per Drop-Down Menü das gewünschte Jubiläum auswählen (25, 40 oder 50 Jahre). Um die Ergebnisse zu erhalten muss man nur noch den Knopf 'Jubilare anzeigen' drücken."
+      ],
+      tr << [
+        td ! [colspan 2] << h3 << "Was ist die Datenbankabfrage?"
+      ],
+      tr << [
+        td << noHtml,
+        td << "Die Datenbankabfrage richtet sich in erster Linie an erfahrene Nutzer, welche über Kenntnisse in der Sprache SQL verfügen. Hier ist es möglich eine beliebige Datenabfrage durchzuführen. Um diese Abfrage durchzuführen schreibt man in das SELECT Feld die Namen der Spalten die man angezeigt haben möchte, bzw. * um sich alle Spalten anzeigen zu lassen. In das FROM Feld schreibt man den Namen der Tabellen in denen sich die gesuchten Spalten befinden. In dem WHERE trägt man die Bedingungen für die anzuzeigenden Datensätze, also die Zeilen der Ergebnistabelle."
       ]
     ]
   ]
