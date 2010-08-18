@@ -38,7 +38,7 @@ runDispatcher conf wikiconf connection = msum
   , dir "simplequery" $ methodSP GET $ showPage "Einfaches Query-Interface" (simpleQueryForm nullQuery)
   -- anniversary-query stuff
   , dir "anniversary" $ methodSP POST $ withData (anniversaryResult connection)
-  , dir "anniversary" $ methodSP GET $ showPage "Anniversary Query" (anniversaryForm nullDateRange)
+  , dir "anniversary" $ methodSP GET $ showPage "Jubiläen" (anniversaryForm nullDateRange)
   -- birthday-query stuff
   , dir "birthday" $ methodSP POST $ withData (birthdayResult connection)
   , dir "birthday" $ methodSP GET $ showPage "Birthday Query" birthdayForm

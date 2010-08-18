@@ -105,3 +105,16 @@ li.bg2, .bg2 { clear:both; border-top:2px solid #3d3d3d; padding:0; margin:5px 0
 
 
 /* custom stylesheets */
+.resulttable {
+  	border-width: 1px;
+	border-spacing: 1px;
+	border-style: solid;
+	border-color: gray;
+	border-collapse: collapse;
+}
+.resulttable td {
+  	border-width: 1px;
+	padding: 2px;
+	border-style: inset;
+	border-color: gray;
+}

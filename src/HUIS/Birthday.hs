@@ -14,7 +14,7 @@ data DateRange = DateRange{from :: String,
 
 instance FromData DateRange where
   fromData = do
-  --regex zur datums��berpr��fung^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$
+  --regex zur datumsüberprüfung^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$
   dateBeginn <- look "date1"
   dateEnd <- look "date2"
   return $ DateRange{from = dateBeginn, to = dateEnd}

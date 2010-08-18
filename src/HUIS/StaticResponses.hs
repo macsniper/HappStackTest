@@ -31,7 +31,7 @@ startPageContent =
         td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
         td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/birthday"] << "Geburtstagsliste",
         td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
-        td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/anniversary"] << "Jubil��en",
+        td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/anniversary"] << "Jubiläen",
         td ! [thestyle "width: 115px;"] << image ! [src "/ressources/img/port_1.jpg"],
         td ! [valign "center", thestyle "width: 115px;"] << anchor ! [href "/simplequery"] << "Datenbankabfrage"
       ]
@@ -67,7 +67,7 @@ helpContent =  [
         td ! [colspan 2, align "center"] << thediv ! [theclass "bg"] << noHtml
       ],
       tr << [
-        td ! [colspan 2] << h3 << "��bersicht"
+        td ! [colspan 2] << h3 << "Übersicht"
       ],
       tr << [
         td << noHtml,
@@ -81,8 +81,6 @@ headerContent:: String-> [Html]
 headerContent title =
   [ thetitle << stringToHtml title
   , script ! [thetype "text/javascript", src "/ressources/js/jquery.js"] << noHtml --workaround, as script expects an Html as param
-  , script ! [thetype "text/javascript", src "/ressources/js/easySlider1.5.js"] << noHtml --workaround, as script expects an Html as param
-  , script ! [thetype "text/javascript", src "/ressources/js/slider.js"] << noHtml --workaround, as script expects an Html as param
   , thelink ! [rel "stylesheet", thetype "text/css", href "/ressources/css/style.css"] << noHtml
   ]
 
@@ -149,7 +147,7 @@ footer = [
       thediv ! [theclass "resize"] << [
         thediv << [
           br,
-          anchor ! [href "#"] << "zur��ck zum Anfang"
+          anchor ! [href "#"] << "zurück zum Anfang"
         ]
       ], p ! [theclass "clr"] << noHtml
     ]
@@ -166,30 +164,18 @@ contentWrap content = [
 -- | Generating HTML-Output from Query
 queryToHtml:: [String] -> [[SqlValue]]-> [Html]-> ServerPart Response
 queryToHtml col stmt req =
-  showPage "Ergebnisse der Anfrage" "/" (req ++ resultTable col stmt)
-
-
--- | Function for the upper-body-part (e.g. menu) of every page.
-upperBody:: [Html]
-upperBody =
-  [ image ! [src "/ressources/img/logo.png"]
-  ]
-
--- | Function for the footer-part of every page.
-lowerBody:: [Html]
-lowerBody =
-  [ br, br, br, br, br
-  , hr
-  , thediv ! [theclass "footer"] << "HUIS, created with Happstack"]
-
+  showPage "Ergebnisse der Anfrage" (req ++ resultTable col stmt)
 
 
 resultTable:: [String] -> [[SqlValue]]-> [Html]
 resultTable col res =
-  [table ! [theclass "resulttable"] << (map colValue col ++ map resultLine res)]
+  [br, br, table ! [width "100%"] << tr << td ! [align "center"] << table ! [theclass "resulttable"] << [
+    [tr << (map colValue col)],
+    map resultLine res
+  ]]
 
 colValue:: String -> Html
-colValue val = td << strong << val 
+colValue val = td ! [align "center"] << strong << val
 
 resultLine:: [SqlValue]-> Html
 resultLine resline =
