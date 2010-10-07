@@ -21,7 +21,8 @@ Executable HUISServer
                   unix >= 2.4.0,
                   mtl >= 1.1,
                   time >= 1.1.4,
-                  convertible >= 1.0.9
+                  convertible >= 1.0.9,
+                  HDBC-postgresql >= 2.2.3.1
   Main-Is:        Main.hs
   Hs-Source-Dirs: src
-  other-modules:  HUIS.Anniversary HUIS.Dispatcher HUIS.Database HUIS.StaticResponses HUIS.Server HUIS.ConfigParser HUIS.SimpleQuery Paths_HUIS HUIS.Reminder HUIS.Birthday
+  other-modules:  HUIS.Anniversary HUIS.Dispatcher HUIS.Database HUIS.StaticResponses HUIS.Server HUIS.ConfigParser HUIS.SimpleQuery Paths_HUIS HUIS.Reminder HUIS.Birthday HUIS.Personensuche HUIS.WhereQueryErmittlung

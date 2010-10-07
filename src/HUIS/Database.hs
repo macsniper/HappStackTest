@@ -1,7 +1,8 @@
-module HUIS.Database (connectDatabase, selectQuery, stripchars, queryOnly, newFromSql) where
+module HUIS.Database (connectDatabase, selectQuery, stripchars, queryOnly, newFromSql, connectDatabaseReminder) where
 
 import Database.HDBC
 import Database.HDBC.ODBC
+import Database.HDBC.PostgreSQL
 import HUIS.ConfigParser(Config)
 import Data.Convertible.Base
 import Data.Map hiding(map)
@@ -12,11 +13,15 @@ import Data.Char
 
 
 -- | Used to connect to the database.
-connectDatabase:: Config -> IO Connection
+connectDatabase:: Config -> IO Database.HDBC.ODBC.Connection
 connectDatabase config = connectODBC $ "DSN=" ++  (config ! "dbsource") ++ ";UID=" ++  (config ! "dbuser") ++ ";PWD=" ++ (config ! "dbpass") ++";"
 
+connectDatabaseReminder:: IO Database.HDBC.PostgreSQL.Connection
+connectDatabaseReminder = connectPostgreSQL "Database=myDataBase;Uid=postgres;"
+
+
 -- | Executes a query.
-selectQuery:: String -> Connection -> IO [[SqlValue]]
+selectQuery:: String -> Database.HDBC.ODBC.Connection -> IO [[SqlValue]]
 selectQuery querystring conn = do
   rows <- quickQuery' conn querystring []
   return rows

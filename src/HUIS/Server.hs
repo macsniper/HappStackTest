@@ -29,8 +29,9 @@ main = do
   --getUserEntryForName (conf ! "user") >>= setUserID . userID
   -- initialise database
   connection <- connectDatabase conf'
-  simpleHTTPWithSocket socket httpconf (runDispatcher conf' wikiconf connection)
-  
+  connection2 <- connectDatabaseReminder
+  simpleHTTPWithSocket socket httpconf (runDispatcher conf' wikiconf connection connection2)
+
 
 -- |Initialises the gitit-wiki and returns the configuration-file.
 getWikiConfiguration::String-> String-> IO Network.Gitit.Config

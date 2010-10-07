@@ -12,6 +12,8 @@ import Database.HDBC.ODBC
 import HUIS.Anniversary
 import HUIS.Reminder
 import HUIS.Birthday
+import HUIS.Personensuche
+import Database.HDBC.PostgreSQL
 
 staticdirs:: [String]
 staticdirs = ["js", "css", "img"]
@@ -23,8 +25,8 @@ staticdirs = ["js", "css", "img"]
 -- \- start page (GET /)
 --
 -- \- gitit-wiki (GET /wiki/)
-runDispatcher:: Config-> Network.Gitit.Config-> Connection-> ServerPart Response
-runDispatcher conf wikiconf connection = msum
+runDispatcher:: Config-> Network.Gitit.Config-> Database.HDBC.ODBC.Connection -> Database.HDBC.PostgreSQL.Connection-> ServerPart Response
+runDispatcher conf wikiconf connection connection2 = msum
   -- GET '/' => show start page
   [ methodM GET >> nullDir >> showStartPage
   -- GET '/ressources/css|js|img)/*'
@@ -43,10 +45,14 @@ runDispatcher conf wikiconf connection = msum
   , dir "birthday" $ methodSP POST $ withData (birthdayResult connection)
   , dir "birthday" $ methodSP GET $ showPage "Geburtstagsliste" (birthdayForm nullDateRange)
   -- reminder
-  --, dir "reminder" $ methodSP POST $ withData (reminderResult connection)
+  , dir "reminder" $ methodSP POST $ withData (reminderResult connection2)
   --, dir "reminder" $ methodSP GET $ showPage "Reminder Query" reminderForm
   -- simple help
   , dir "help" $ methodSP GET $ showPage "Hilfe" helpContent
+  -- personensuche
+  , dir "personensuche" $ methodSP POST $ withData (personensucheResult connection)
+  , dir "personensuche" $ methodSP GET $ showPage "personensuche Query" personensucheForm
+
   ]
 
 serveStaticFile:: String-> String-> ServerPart Response

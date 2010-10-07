@@ -13,11 +13,11 @@ whereQueryZu textfeldInhalt =
 
 whereQuerySuche:: Parser SQL
 whereQuerySuche = do
-    vn <-vorname
-    nn <-try nachname <|> return ""
+    vn <- vorname
+    nn <- try nachname <|> return ""
     return $ if vn == "" then ""
            else "WHERE " ++ (if nn=="" then "pgd_vn= '" ++ vn ++ "'"
-                            else "pgd_vn='" ++ vn ++ "', pgd_nn='" ++ nn ++ "'")
+                            else "pgd_vn='" ++ vn ++ "', pgd_nn='" ++ nn ++ "'") ++ ";"
 
 vorname:: Parser String
 vorname = do

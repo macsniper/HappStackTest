@@ -6,12 +6,17 @@ import Control.Monad.Trans (MonadIO, liftIO)
 import Control.Monad
 import Happstack.Server
 import Database.HDBC
+import HUIS.Database
+import HUIS.StaticResponses
+import Database.HDBC.PostgreSQL
+import Data.List
+import Data.Time.Clock
+import Data.Time.Calendar
 
-data Reminder = Reminder{userID :: Integer
-                        ,erstellt :: UTCTime
-                        ,bearbeitet :: UTCTime
-                        ,erledigen :: UTCTime
-                        ,erledigt :: Bool
+
+data Reminder = Reminder{userName :: String
+                        ,erledigen :: String
+                        ,erledigt :: String
                         ,art :: String
                         ,content :: String}
 
@@ -20,15 +25,14 @@ instance FromData Reminder where
   user <- lookRead "user"
   frist <- lookRead "erledigen"
   notiz <- look "inhalt"
+  fertig <- lookRead "erledigt"
   notizart <- lookRead "art"
-  return $ nullReminder{userID = user, erledigen = frist, content = notiz, art = notizart}
+  return $ Reminder{userName = user, erledigen = frist, erledigt = fertig, content = notiz, art = notizart}
 
 nullReminder :: Reminder
-nullReminder = Reminder{userID = undefined
-                        ,erstellt = undefined
-                        ,bearbeitet = undefined
+nullReminder = Reminder{userName = undefined
                         ,erledigen = undefined
-                        ,erledigt = False
+                        ,erledigt = undefined
                         ,art = undefined
                         ,content = "" }
 
@@ -37,10 +41,10 @@ reminderForm:: [Html]
 reminderForm =
   [ gui "/Reminder" <<
     [ label << "User"
-    , textfield "user" ! [size "30", value "Bitte Name eingeben"]
+    , textfield "user" ! [size "30", value ""]
     , br
     , label << "zu erledigen bis"
-    , textfield "erledigen" ! [size "30", value "yyyy-mm-dd"]
+    , textfield "erledigen" ! [size "30", value ""]
     , br
     , label << "Inhalt"
     , br
@@ -49,29 +53,46 @@ reminderForm =
                   , cols "40" ] << [ "Text eingeben" ]
     , br
     , label << "Art der Notiz"
-    , select ! [name "art"] << [ option << p << "Telefonnotiz"
+    , select ! [name "art"] << [ option << p << ""
+                               , option << p << "Telefonnotiz"
                                , option << p << "Gesprächsnotiz"
                                , option << p << "Geburtsurkunde"
                                , option << p << "Elternzeitantrag"
                                , option << p << "sonstige Hinweise"
                                ]
     , br
-    , submit "run" "anlegen" ]
+    , label << "Erledigt?"
+    , select ! [name "erledigt"] << [option << p << "Nein"
+                                    ,option << p << "Ja"
+                                    ]
+    , br
+    , submit "run" "anlegen"
+    , br
+    , label << "Wiedervorlage vom "
+    , textfield "datum" ! [size "30", value  "JJJJ-MM-TT"]
+    , label << "anzeigen."
+    , br
+    , submit "run2" "aufrufen"]
+
   , thediv << "HUIS-Reminder"
   ]
+
+date :: IO (Integer,Int,Int) -- :: (year,month,day)
+date = getCurrentTime >>= return . toGregorian . utctDay
+
 
 saveReminderToDb:: (IConnection d, MonadIO m) => d -> Reminder -> m Integer
 saveReminderToDb db reminder = do
         let query = "INSERT INTO pbv_wiedervl(erstellt_von, erstellt, zuletzt_bearbeitet, zu_erledigen_bis, erledigt, art, kunde)" ++
-                    " VALUES(?, ?, ?, ?, ?, ?, ?)"
+                    " VALUES(?, ?, ?, ?, ?, ?)"
         t <- liftIO getCurrentTime
-        let vals = [toSql (userID reminder), toSql t, toSql t, toSql t, toSql (erledigt reminder),
+        let vals = [toSql (userName reminder), toSql t, toSql t, toSql t, toSql (erledigt reminder),
                     toSql (art reminder), toSql (content reminder)]
         liftIO $ withTransaction db $ \d -> run d query vals
         [[uid]] <- liftIO $ quickQuery db "select last_insert_rowid()" []
         return (fromSql uid)
 
-getReminderFromDb :: (IConnection d, MonadIO m, MonadPlus m)
+{-getReminderFromDb :: (IConnection d, MonadIO m, MonadPlus m)
                     => d -> Integer -> m Reminder
 getReminderFromDb db uid = do
         reminders <- liftIO $ handleSqlError $
@@ -85,5 +106,12 @@ getReminderFromDb db uid = do
                                     , erledigt = fromSql jn
                                     , art = fromSql dw
                                     , content = fromSql wd}
-           _ -> mzero
+           _ -> mzero-}
+
+reminderResult:: Connection -> Reminder -> ServerPart Response
+reminderResult conn req = do
+  let querystring = "SELECT * FROM pbv_wiedervl WHERE zu_erledigen_bis =" ++ erledigen req ++ "AND erstellt_von" ++ userName req ++ "AND erledigt" ++ erledigt req ++ "AND art" ++ art req ++ ";"
+  result <- liftIO $ handleSqlError $ quickQuery conn querystring []
+  queryToHtml [] result reminderForm
+
 

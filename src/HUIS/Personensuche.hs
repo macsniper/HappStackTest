@@ -16,7 +16,7 @@ import HUIS.WhereQueryErmittlung(whereQueryZu)
 type SQL = String
 type ErgebnisTabelle = [[SqlValue]]
 
-newtype Personensuche = Personensuche{ content:: SQL }
+newtype Personensuche = Personensuche{ content:: SQL}
 
 personensucheForm:: [Html]
 personensucheForm =
@@ -28,21 +28,20 @@ personensucheForm =
     , submit "run" "Suche Person" ]
   , thediv << "HUIS-Personensuche" ]
 
-personensucheResult:: Connection-> Personensuche -> ServerPart Response
+personensucheResult:: Connection-> String -> ServerPart Response
 personensucheResult conn req = do
-  let query= "SELECT pgd_vorname, pgd_name FROM pgd WHERE pgd_vorname=vn AND pgd_nachname=nn OR WHERE pdg_nachname=nn"
-  result <- liftIO $ handleSqlError $ quickQuery conn (content req) []
-  ok $ toResponse $ queryyToHtml result
-
-
--- | Generating HTML-Output from Query
-queryyToHtml:: ErgebnisTabelle-> Html
-queryyToHtml stmt = thehtml <<
-    [ header << headerContent "HUIS-Personensuche"
-    , body << concat [upperBody, personensucheForm, resultTable stmt, lowerBody]]
+  let query= "SELECT pgd_vorname, pgd_name FROM pgd" ++ req
+  result <- liftIO $ handleSqlError $ quickQuery conn query []
+  queryToHtml [] result personensucheForm  
 
 instance FromData Personensuche where
  fromData = do
-    gesamtName <- look "eingabefeld"
-    let query=whereQueryZu gesamtName
-     return Personensuche{content = query}
+    gesamtName <- look "gesamtName"
+    let temp = whereQueryZu gesamtName
+    return Personensuche{content = temp}
+
+
+-- ergebnis abfangen
+-- parser aufrufen
+-- ergebnis übergeben
+
