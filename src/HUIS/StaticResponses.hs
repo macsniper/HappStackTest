@@ -95,6 +95,7 @@ headerContent:: String-> [Html]
 headerContent title =
   [ thetitle << stringToHtml title
   , script ! [thetype "text/javascript", src "/ressources/js/jquery.js"] << noHtml --workaround, as script expects an Html as param
+  , script ! [thetype "text/javascript", src "/ressources/js/sorttable.js"] << noHtml
   , thelink ! [rel "stylesheet", thetype "text/css", href "/ressources/css/style.css"] << noHtml
   ]
 
@@ -184,7 +185,7 @@ queryToHtml col stmt req =
 
 resultTable:: [String] -> [[SqlValue]]-> [Html]
 resultTable col res =
-  [br, br, table ! [width "100%"] << tr << td ! [align "center"] << table ! [theclass "resulttable"] << [
+  [br, br, table ! [width "100%", theclass "sortable"] << tr << td ! [align "center"] << table ! [theclass "resulttable"] << [
     [tr << (map colValue col)],
     map resultLine res
   ]]
