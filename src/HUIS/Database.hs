@@ -17,7 +17,7 @@ connectDatabase:: Config -> IO Database.HDBC.ODBC.Connection
 connectDatabase config = connectODBC $ "DSN=" ++  (config ! "dbsource") ++ ";UID=" ++  (config ! "dbuser") ++ ";PWD=" ++ (config ! "dbpass") ++";"
 
 connectDatabaseReminder:: IO Database.HDBC.PostgreSQL.Connection
-connectDatabaseReminder = connectPostgreSQL "Database=myDataBase;Uid=postgres;"
+connectDatabaseReminder = connectPostgreSQL "host=localhost dbname=postgre user=postgre password=''"
 
 
 -- | Executes a query.
