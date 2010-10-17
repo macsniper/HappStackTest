@@ -84,33 +84,28 @@ date = getCurrentTime >>= return . toGregorian . utctDay
 saveReminderToDb:: (IConnection d, MonadIO m) => d -> Reminder -> m Integer
 saveReminderToDb db reminder = do
         let query = "INSERT INTO pbv_wiedervl(erstellt_von, erstellt, zuletzt_bearbeitet, zu_erledigen_bis, erledigt, art, kunde)" ++
-                    " VALUES(?, ?, ?, ?, ?, ?)"
-        t <- liftIO getCurrentTime
-        let vals = [toSql (userName reminder), toSql t, toSql t, toSql t, toSql (erledigt reminder),
-                    toSql (art reminder), toSql (content reminder)]
-        liftIO $ withTransaction db $ \d -> run d query vals
-        [[uid]] <- liftIO $ quickQuery db "select last_insert_rowid()" []
-        return (fromSql uid)
+                     " VALUES(" ++ userName req ++ ", current_date,current_date," ++ erledigen req ++ "," ++ erledigt req ++ "," ++ art req ++ "," ++ content req ++ ")"
+         liftIO $ handleSqlError $ run conn query []
+        dir "reminder" $ methodSP GET $ showPage "Reminder Query" reminderForm
 
-{-getReminderFromDb :: (IConnection d, MonadIO m, MonadPlus m)
-                    => d -> Integer -> m Reminder
-getReminderFromDb db uid = do
-        reminders <- liftIO $ handleSqlError $
-                    quickQuery db "SELECT * FROM pbv_wiedervl WHERE id = ?" [toSql uid]
-        case reminders of
-           ([_,tit,ts,synt,cont,jn,dw,wd]:_) ->
-                    return Reminder { userID = uid
-                                    , erstellt = fromSql ts
-                                    , bearbeitet = fromSql synt
-                                    , erledigen = fromSql cont
-                                    , erledigt = fromSql jn
-                                    , art = fromSql dw
-                                    , content = fromSql wd}
-           _ -> mzero-}
+makeWhereQuery :: Reminder -> String
+makeWhereQuery input =
+    if datum input == "" then " "
+        else "AND zu_erledigen_bis =" ++ datum input
+
+makeWhereQueryUser :: Reminder -> String
+makeWhereQueryUser input =
+    if userGet input == "" then " "
+        else "AND user =" ++ userGet input
+
+makeWhereQueryErl :: Reminder -> String
+makeWhereQueryErl input =
+    if erledigtGet input == "" then " "
+        else "AND erledigt =" ++ erledigtGet input
 
 reminderResult:: Connection -> Reminder -> ServerPart Response
 reminderResult conn req = do
-  let querystring = "SELECT * FROM pbv_wiedervl WHERE zu_erledigen_bis =" ++ erledigen req ++ "AND erstellt_von" ++ userName req ++ "AND erledigt" ++ erledigt req ++ "AND art" ++ art req ++ ";"
+  let querystring = "SELECT * FROM pbv_wiedervl WHERE TRUE" ++ makeWhereQuery req ++ userGet req ++ erledigtGet req ++ ";"
   result <- liftIO $ handleSqlError $ quickQuery conn querystring []
   queryToHtml [] result reminderForm
 
