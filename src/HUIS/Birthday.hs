@@ -68,7 +68,7 @@ birthdayResult conn dateRange = do
   queryToHtml ["Titel", "Vorname(n)", "Zus.", "Nachname", "Institut", "Alter", "Geburtsdatum"] result $ birthdayForm dateRange
 
 
-  birthdayResultOhneHtml:: Connection-> DateRange-> ServerPart Response
+{-birthdayResultOhneHtml:: Connection-> DateRange-> ServerPart Response
 birthdayResultOhneHtml conn dateRange = do
   let (gebMonMin,gebDayMin) = mmDdOfDate $ from dateRange
       (gebMonMax,gebDayMax) = mmDdOfDate $ to dateRange
@@ -79,3 +79,4 @@ birthdayResultOhneHtml conn dateRange = do
                     ++ " OR (MONTH(pgd_geburtsdatum) = " ++ gebMonMin ++ " AND DAY(pgd_geburtsdatum) >= " ++ gebDayMin ++ ")"
                     ++ " OR (MONTH(pgd_geburtsdatum) = " ++ gebMonMax ++ " AND DAY(pgd_geburtsdatum) <= " ++ gebDayMax ++ ");"
   result <- liftIO $ handleSqlError $ quickQuery conn querystring []
+  return result -}

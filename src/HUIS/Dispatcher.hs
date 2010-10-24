@@ -46,7 +46,7 @@ runDispatcher conf wikiconf connection connection2 = msum
   , dir "birthday" $ methodSP GET $ showPage "Geburtstagsliste" (birthdayForm nullDateRange)
   -- reminder
   , dir "reminder" $ methodSP POST $ withData (reminderResult connection2)
-  --, dir "reminder" $ methodSP GET $ showPage "Reminder Query" reminderForm
+  , dir "reminder" $ methodSP GET $ showPage "Reminder Query" reminderForm
   -- simple help
   , dir "help" $ methodSP GET $ showPage "Hilfe" helpContent
   -- personensuche
