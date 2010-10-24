@@ -13,7 +13,7 @@ import HUIS.Anniversary
 import HUIS.Reminder
 import HUIS.Birthday
 import HUIS.Personensuche
-import Database.HDBC.PostgreSQL
+import Database.HDBC.Sqlite3
 
 staticdirs:: [String]
 staticdirs = ["js", "css", "img"]
@@ -25,7 +25,7 @@ staticdirs = ["js", "css", "img"]
 -- \- start page (GET /)
 --
 -- \- gitit-wiki (GET /wiki/)
-runDispatcher:: Config-> Network.Gitit.Config-> Database.HDBC.ODBC.Connection -> Database.HDBC.PostgreSQL.Connection-> ServerPart Response
+runDispatcher:: Config-> Network.Gitit.Config-> Database.HDBC.ODBC.Connection -> Database.HDBC.Sqlite3.Connection-> ServerPart Response
 runDispatcher conf wikiconf connection connection2 = msum
   -- GET '/' => show start page
   [ methodM GET >> nullDir >> showStartPage

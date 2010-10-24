@@ -8,7 +8,7 @@ import Happstack.Server
 import Database.HDBC
 import HUIS.Database
 import HUIS.StaticResponses
-import Database.HDBC.PostgreSQL
+import Database.HDBC.Sqlite3
 import Data.List
 import Data.Time.Clock
 import Data.Time.Calendar

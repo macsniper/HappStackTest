@@ -2,7 +2,7 @@ module HUIS.Database (connectDatabase, selectQuery, stripchars, queryOnly, newFr
 
 import Database.HDBC
 import Database.HDBC.ODBC
-import Database.HDBC.PostgreSQL
+import Database.HDBC.Sqlite3
 import HUIS.ConfigParser(Config)
 import Data.Convertible.Base
 import Data.Map hiding(map)
@@ -16,8 +16,8 @@ import Data.Char
 connectDatabase:: Config -> IO Database.HDBC.ODBC.Connection
 connectDatabase config = connectODBC $ "DSN=" ++  (config ! "dbsource") ++ ";UID=" ++  (config ! "dbuser") ++ ";PWD=" ++ (config ! "dbpass") ++";"
 
-connectDatabaseReminder:: IO Database.HDBC.PostgreSQL.Connection
-connectDatabaseReminder = connectPostgreSQL "host=localhost dbname=postgre user=postgre password=''"
+connectDatabaseReminder:: IO Database.HDBC.Sqlite3.Connection
+connectDatabaseReminder = connectSqlite3 "database.sqlite"
 
 
 -- | Executes a query.
