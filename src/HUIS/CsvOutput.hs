@@ -1,7 +1,8 @@
-module HUIS.CsvOutput where
+module CsvOutput where
 
 import Database.HDBC
 import Database.HDBC.SqlValue
+import HUIS.Birthday
 
 -- | A hidden input field
 hidden  :: Monad m => Maybe String -> XHtmlForm m String
@@ -14,18 +15,18 @@ csvForm =
 -- Abfrage erstellen, wo die Datei gespeichert werden soll
 
 birthdayCsv :: [[Sqlvalue]] -> String -> IO()
-birthdayCsv Statement path = do
+birthdayCsv BirtdayResultOhneHtml path = do
   writeFile path "Titel, Vorname(n), Zus., Nachname, Institut, Alter, Geburtsdatum"
   map CsvLine Statement path "/n"
 
 
-csvLine :: [Sqlvalue] -> String -> IO()
-csvLine resline path =
+CsvLine :: [Sqlvalue] -> String -> IO()
+CsvLine resline path =
    map CsvValue resline path
 
-csvValue :: SqlValue -> String -> IO()
-csvValue val path = appendFile path fromsql $ val
-  appendFile path ","
+CsvValue :: SqlValue -> String -> IO()
+CsvValue val path = appendFile path fromsql $ val
+  appendFile path ", "
 
 
 

@@ -40,7 +40,8 @@ birthdayForm formdata =
           td ! [thestyle "width: 115px;"] << textfield "date2" ! [size "30", value $ to formdata]
         ],tr << [
           td << noHtml,
-          td << submit "run" "Geburtstage anzeigen"
+          td << submit "run" "Geburtstage anzeigen",
+          td << "input thetype\"button\"value\"CSV Speichern umschalten\"onclick\"this.form.gui=/CsvOutput\""
         ]
       ]
     ]
@@ -65,3 +66,16 @@ birthdayResult conn dateRange = do
                     ++ " OR (MONTH(pgd_geburtsdatum) = " ++ gebMonMax ++ " AND DAY(pgd_geburtsdatum) <= " ++ gebDayMax ++ ");"
   result <- liftIO $ handleSqlError $ quickQuery conn querystring []
   queryToHtml ["Titel", "Vorname(n)", "Zus.", "Nachname", "Institut", "Alter", "Geburtsdatum"] result $ birthdayForm dateRange
+
+
+  birthdayResultOhneHtml:: Connection-> DateRange-> ServerPart Response
+birthdayResultOhneHtml conn dateRange = do
+  let (gebMonMin,gebDayMin) = mmDdOfDate $ from dateRange
+      (gebMonMax,gebDayMax) = mmDdOfDate $ to dateRange
+      querystring = "SELECT druck_anredetitelm, pgd_vornamen,pgd_namenbestand, pgd_name, lname1"
+                    ++ ", (YEAR(CURRENT)-YEAR(pgd_geburtsdatum)) as alter, pgd_geburtsdatum"
+                    ++ " FROM ((pgd left outer join k_anredetitel on (pgd.pgd_titel = k_anredetitel.key_anredetitel)) left outer join pfi on (pgd.pgd_join_id = pfi.pfi_pgd_join_id AND pfi.pfi_bis > CURRENT)) left outer join inst on (pfi.poz_institut = inst.inst_nr)"
+                    ++ " WHERE (MONTH(pgd_geburtsdatum) > " ++ gebMonMin ++ " AND MONTH(pgd_geburtsdatum) < " ++ gebMonMax ++ ")"
+                    ++ " OR (MONTH(pgd_geburtsdatum) = " ++ gebMonMin ++ " AND DAY(pgd_geburtsdatum) >= " ++ gebDayMin ++ ")"
+                    ++ " OR (MONTH(pgd_geburtsdatum) = " ++ gebMonMax ++ " AND DAY(pgd_geburtsdatum) <= " ++ gebDayMax ++ ");"
+  result <- liftIO $ handleSqlError $ quickQuery conn querystring []
